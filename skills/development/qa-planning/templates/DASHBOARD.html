@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--
+  QA test dashboard. Reads its data from test-data.js (which sets window.TEST_DATA).
+  Copy both files into the output folder. Opens by double-click — no server needed.
+  test-data.js holds the same JSON schema as TEST-CASE.json, wrapped in one assignment.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>QA Test Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --border: #262b36; --text: #e6e9ef;
+    --muted: #9aa4b2; --accent: #4f8cff;
+    --pass: #2ecc71; --fail: #e74c3c; --blocked: #e67e22; --skipped: #7f8c8d; --not_run: #4a5160;
+    --p0: #e74c3c; --p1: #e67e22; --p2: #7f8c8d;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.5 -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); }
+  header { padding: 20px 28px; border-bottom: 1px solid var(--border); }
+  h1 { margin: 0 0 4px; font-size: 20px; }
+  .sub { color: var(--muted); font-size: 13px; }
+  main { padding: 24px 28px; max-width: 1100px; margin: 0 auto; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  tbody.flow-row tr.summary { cursor: pointer; }
+  tbody.flow-row tr.summary:hover { background: var(--panel); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #0b0d10; }
+  .st-pass { background: var(--pass); } .st-fail { background: var(--fail); color: #fff; }
+  .st-blocked { background: var(--blocked); } .st-skipped { background: var(--skipped); color: #fff; }
+  .st-not_run { background: var(--not_run); color: #fff; }
+  .pri { font-weight: 700; } .pri-P0 { color: var(--p0); } .pri-P1 { color: var(--p1); } .pri-P2 { color: var(--p2); }
+  .cases { display: none; background: #12141a; }
+  .cases.open { display: table-row; }
+  .cases td { padding: 0 12px 12px 12px; }
+  .cases table { margin: 8px 0 0; }
+  .cases th, .cases td { border-bottom: 1px solid var(--border); }
+  .rollup span { margin-right: 10px; font-size: 12px; }
+  .caret { display: inline-block; width: 14px; color: var(--muted); }
+  .steps { color: var(--muted); font-size: 13px; margin: 4px 0 0; padding-left: 16px; }
+  .error { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  code { background: #0b0d10; padding: 2px 6px; border-radius: 4px; }
+  .flowname { font-weight: 600; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">QA Test Dashboard</h1>
+  <div class="sub" id="subtitle">Loading…</div>
+</header>
+<main id="content"></main>
+
+<script src="test-data.js"></script>
+<script>
+  const STATUSES = ["pass", "fail", "blocked", "skipped", "not_run"];
+
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
+  function badge(status) { const s = STATUSES.includes(status) ? status : "not_run"; return `<span class="badge st-${s}">${s}</span>`; }
+
+  function rollup(cases) {
+    const counts = Object.fromEntries(STATUSES.map(s => [s, 0]));
+    cases.forEach(c => { counts[STATUSES.includes(c.status) ? c.status : "not_run"]++; });
+    return STATUSES.filter(s => counts[s]).map(s => `<span>${badge(s)} ${counts[s]}</span>`).join("");
+  }
+
+  function renderCases(cases) {
+    const rows = cases.map(c => `
+      <tr>
+        <td><code>${esc(c.id)}</code></td>
+        <td>${esc(c.title)}
+          ${(c.steps || []).length ? `<ol class="steps">${c.steps.map(s => `<li>${esc(s.action)} → <em>${esc(s.expectedResult)}</em></li>`).join("")}</ol>` : ""}
+        </td>
+        <td class="pri pri-${esc(c.priority)}">${esc(c.priority)}</td>
+        <td>${badge(c.status)}</td>
+        <td>${esc(c.requirementRef || "")}</td>
+      </tr>`).join("");
+    return `<table>
+      <thead><tr><th>ID</th><th>Title / steps</th><th>Priority</th><th>Status</th><th>Requirement</th></tr></thead>
+      <tbody>${rows}</tbody></table>`;
+  }
+
+  function render(data) {
+    document.getElementById("title").textContent = (data.feature || "Feature") + " — QA Test Dashboard";
+    const total = (data.flows || []).reduce((n, f) => n + (f.testCases || []).length, 0);
+    document.getElementById("subtitle").innerHTML =
+      `${(data.flows || []).length} flows · ${total} test cases` +
+      (data.planRef ? ` · <a href="${esc(data.planRef)}" style="color:var(--accent)">test plan</a>` : "");
+
+    const body = (data.flows || []).map((f, i) => {
+      const cases = f.testCases || [];
+      return `<tbody class="flow-row">
+        <tr class="summary" data-i="${i}">
+          <td><span class="caret" id="caret-${i}">▸</span> <span class="flowname">${esc(f.name)}</span></td>
+          <td>${esc(f.featureFile || "")}</td>
+          <td>${cases.length}</td>
+          <td class="rollup">${rollup(cases)}</td>
+        </tr>
+        <tr class="cases" id="cases-${i}"><td colspan="4">${renderCases(cases)}</td></tr>
+      </tbody>`;
+    }).join("");
+
+    document.getElementById("content").innerHTML = `
+      <table>
+        <thead><tr><th>Flow</th><th>Feature file</th><th>Cases</th><th>Status</th></tr></thead>
+        ${body}
+      </table>`;
+
+    document.querySelectorAll("tr.summary").forEach(row => {
+      row.addEventListener("click", () => {
+        const i = row.getAttribute("data-i");
+        document.getElementById("cases-" + i).classList.toggle("open");
+        document.getElementById("caret-" + i).textContent =
+          document.getElementById("cases-" + i).classList.contains("open") ? "▾" : "▸";
+      });
+    });
+  }
+
+  if (window.TEST_DATA) {
+    render(window.TEST_DATA);
+  } else {
+    document.getElementById("subtitle").textContent = "";
+    document.getElementById("content").innerHTML =
+      `<div class="error"><strong>No data loaded.</strong><br><br>
+      <code>test-data.js</code> must sit next to this file and set
+      <code>window.TEST_DATA = { ... }</code>.</div>`;
+  }
+</script>
+</body>
+</html>

@@ -1,4 +1,7 @@
-{
+// Live database for dashboard.html — the single source of truth for test cases and status.
+// Same schema as TEST-CASE.json, wrapped in one assignment so the dashboard opens by double-click.
+// Edit a case's `status` here (not_run | pass | fail | blocked | skipped) and refresh the dashboard.
+window.TEST_DATA = {
   "feature": "Authentication",
   "planRef": "authentication-test-plan.md",
   "generatedFor": "{spec path or ticket link}",
@@ -22,10 +25,7 @@
             "Application is running",
             "Registered user jane@example.com exists"
           ],
-          "testData": {
-            "email": "jane@example.com",
-            "otp": "123456"
-          },
+          "testData": { "email": "jane@example.com", "otp": "123456" },
           "steps": [
             {
               "step": 1,
@@ -49,10 +49,7 @@
           "tags": ["regression"],
           "requirementRef": "REQ-AUTH-001",
           "preconditions": ["User has requested an OTP for jane@example.com"],
-          "testData": {
-            "email": "jane@example.com",
-            "otp": "000000"
-          },
+          "testData": { "email": "jane@example.com", "otp": "000000" },
           "steps": [
             {
               "step": 1,
@@ -65,4 +62,4 @@
       ]
     }
   ]
-}
+};

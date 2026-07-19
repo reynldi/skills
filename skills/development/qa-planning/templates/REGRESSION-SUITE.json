@@ -1,0 +1,16 @@
+{
+  "suite": "{Feature name} Regression Suite",
+  "description": "Curated cases run to guard against regressions. Cadence per priority: P0 always, P1 weekly+, P2 at releases.",
+  "sources": ["{feature}-test-cases.json"],
+  "cases": [
+    { "id": "TC-001", "priority": "P0", "cadence": "always", "area": "login" },
+    { "id": "TC-002", "priority": "P1", "cadence": "weekly", "area": "login" },
+    { "id": "TC-003", "priority": "P1", "cadence": "weekly", "area": "validation" }
+  ],
+  "excluded": [
+    {
+      "id": "TC-010",
+      "reason": "Covered by unit tests; not cost-effective as a manual regression case"
+    }
+  ]
+}

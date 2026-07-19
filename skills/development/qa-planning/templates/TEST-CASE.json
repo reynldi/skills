@@ -1,0 +1,62 @@
+{
+  "feature": "{Feature name}",
+  "requirementRef": "REQ-AUTH-001",
+  "generatedFor": "{spec path or ticket link}",
+  "testCases": [
+    {
+      "id": "TC-001",
+      "title": "Successful login with valid credentials",
+      "priority": "P0",
+      "type": "functional",
+      "tags": ["smoke", "regression"],
+      "requirementRef": "REQ-AUTH-001",
+      "preconditions": [
+        "Application is running",
+        "Registered user jane@example.com exists with a known password"
+      ],
+      "testData": {
+        "email": "jane@example.com",
+        "password": "Str0ng!Pass"
+      },
+      "steps": [
+        {
+          "step": 1,
+          "action": "Navigate to the login page",
+          "expectedResult": "Login form is displayed with email and password fields"
+        },
+        {
+          "step": 2,
+          "action": "Enter the email and password from test data and submit",
+          "expectedResult": "User is redirected to the dashboard and a session cookie is set"
+        }
+      ],
+      "postconditions": ["User has an active authenticated session"]
+    },
+    {
+      "id": "TC-002",
+      "title": "Login rejected with wrong password",
+      "priority": "P1",
+      "type": "negative",
+      "tags": ["regression"],
+      "requirementRef": "REQ-AUTH-001",
+      "preconditions": ["Registered user jane@example.com exists"],
+      "testData": {
+        "email": "jane@example.com",
+        "password": "wrong-password"
+      },
+      "steps": [
+        {
+          "step": 1,
+          "action": "Navigate to the login page",
+          "expectedResult": "Login form is displayed"
+        },
+        {
+          "step": 2,
+          "action": "Enter the email and wrong password and submit",
+          "expectedResult": "Error 'Invalid email or password' is shown and user stays on the login page"
+        }
+      ],
+      "postconditions": ["No session is created"]
+    }
+  ]
+}

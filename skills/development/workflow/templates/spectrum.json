@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "defaults": { "provider": "claude", "model": "", "effort": "medium", "run": "inline" },
+  "roles": {
+    "coordinator": { "run": "inline" },
+    "researcher": { "effort": "medium" },
+    "planner": { "effort": "high" },
+    "implementer": { "effort": "medium" },
+    "reviewer": { "provider": "codex", "model": "", "effort": "high", "fresh": true },
+    "qa": { "effort": "medium", "fresh": true }
+  },
+  "stages": {
+    "product-discovery": "researcher",
+    "product-analysis": "researcher",
+    "product-validation": "researcher",
+    "product-prioritization": "planner",
+    "product-prd": "planner",
+    "product-metrics": "planner",
+    "plan-product-spec": "planner",
+    "plan-technical-spec": "planner",
+    "plan-contract-spec": "planner",
+    "plan-verification": "reviewer",
+    "plan-ready": "planner",
+    "plan-implement": "implementer",
+    "impl-review": "reviewer",
+    "qa-test": "qa"
+  },
+  "reuse": { "policy": "reuse", "rotateAtContextPct": 75, "alwaysFresh": ["reviewer", "qa"] },
+  "memory": { "featureMemory": "memory.md", "handoffDir": "handoff", "globalMemory": "" },
+  "artifacts": { "specsRoot": "specs" },
+  "delegation": { "yolo": false }
+}

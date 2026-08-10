@@ -1,9 +1,9 @@
 ---
-name: workflow
-description: Orchestrate the full feature delivery pipeline — Planning (/plan-product-spec → /plan-technical-spec → /plan-contract-spec → /plan-verification → /plan-ready) → Implement (/plan-implement) → Review (/impl-review) → QA (/qa-test) — with approval gates, resume, per-feature memory, and optional multi-model delegation (claude/codex/gemini/opencode/pi via handoff briefs). Use when the user wants to build a feature end-to-end or invokes /workflow.
+name: development-workflow
+description: Orchestrate the full feature delivery pipeline — Planning (/plan-product-spec → /plan-technical-spec → /plan-contract-spec → /plan-verification → /plan-ready) → Implement (/plan-implement) → Review (/impl-review) → QA (/qa-test) — with approval gates, resume, per-feature memory, and optional multi-model delegation (claude/codex/gemini/opencode/pi via handoff briefs). Use when the user wants to build a feature end-to-end or invokes /development-workflow.
 ---
 
-# Workflow
+# Development Workflow
 
 End-to-end feature delivery coordinator. Each stage is its own skill and also runs standalone; this skill sequences them, enforces gates, maintains the feature's memory, and can delegate stages to other models. Design principles: file-based state over hidden state (any agent can pick up from disk), everything observable (briefs and logs on disk), minimal machinery.
 

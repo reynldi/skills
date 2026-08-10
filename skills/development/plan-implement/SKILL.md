@@ -1,6 +1,6 @@
 ---
 name: plan-implement
-description: Execute an approved tasks.md task-by-task with tests, per-task reviewer PASS, and checkpoint gates; writes implementation-report.md. Stage 6 of /workflow, after /plan-ready. Use when the user asks to implement approved tasks, execute tasks.md, or invokes /plan-implement.
+description: Execute an approved tasks.md task-by-task with tests, per-task reviewer PASS, and checkpoint gates; writes implementation-report.md. Stage 6 of /development-workflow, after /plan-ready. Use when the user asks to implement approved tasks, execute tasks.md, or invokes /plan-implement.
 ---
 
 # Plan Implement

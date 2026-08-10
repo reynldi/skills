@@ -1,6 +1,6 @@
 ---
 name: plan-verification
-description: Skeptical pre-implementation review of Product/Technical/Contract Specs — ambiguity, contradictions, over-engineering, risk — with severity-ranked findings and interactive Q&A. Stage 4 of /workflow, before /plan-ready. Use when the user asks to verify, review, or challenge a plan/spec set, or invokes /plan-verification.
+description: Skeptical pre-implementation review of Product/Technical/Contract Specs — ambiguity, contradictions, over-engineering, risk — with severity-ranked findings and interactive Q&A. Stage 4 of /development-workflow, before /plan-ready. Use when the user asks to verify, review, or challenge a plan/spec set, or invokes /plan-verification.
 ---
 
 # Plan Verification

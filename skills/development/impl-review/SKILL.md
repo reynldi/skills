@@ -1,6 +1,6 @@
 ---
 name: impl-review
-description: Holistic post-implementation review of the whole feature diff against Product/Technical/Contract Specs — spec compliance, correctness, security, tests, maintainability; writes review-report.md. Stage 7 of /workflow, after /plan-implement. Use when the user asks to review an implemented feature or invokes /impl-review.
+description: Holistic post-implementation review of the whole feature diff against Product/Technical/Contract Specs — spec compliance, correctness, security, tests, maintainability; writes review-report.md. Stage 7 of /development-workflow, after /plan-implement. Use when the user asks to review an implemented feature or invokes /impl-review.
 ---
 
 # Implementation Review

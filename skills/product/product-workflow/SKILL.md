@@ -9,7 +9,7 @@ This skill runs the product work for a feature. It controls the six other produc
 skills. There are two halves to the job:
 
 - This loop answers one question: is this worth the work, and for which users?
-- `/workflow`, the build pipeline, answers a different question: can we build it,
+- `/development-workflow`, the build pipeline, answers a different question: can we build it,
   and does it work?
 
 This is a loop and not a line. The team measures what it ships. The team uses what
@@ -32,7 +32,7 @@ in `STE.md`. Keep instruction sentences to 20 words or less. Use the active voic
 | P4 | Select what to build | product-prioritization | priorities.md | the user approves the selection |
 | P5 | Write the PRD | product-prd | prd.md | the checks pass and the user approves |
 | P6 | Set the numbers | product-metrics | metrics.md | the numbers are exact and the user approves them before PRD approval |
-| →  | Build it | `/workflow` (stages 1–8) | its own documents | its own gates. prd.md is the input |
+| →  | Build it | `/development-workflow` (stages 1–8) | its own documents | its own gates. prd.md is the input |
 | P7 | Measure the result | product-metrics (update) | metrics.md | you record the real numbers and the user approves the lessons, then go back to P1 |
 
 All documents go in one folder for the initiative. One `memory.md` goes in the same
@@ -46,7 +46,7 @@ Do these steps one time for each initiative:
 2. Read `.spectrum.json` in the project root, if the file exists. It sets which model
    does which role. The meaning of each field is in the Configuration part of the
    `workflow` skill. That skill is the folder next to this one. In this repository it
-   is `skills/development/workflow/`.
+   is `skills/development/development-workflow/`.
 3. Make the folder `{artifacts.specsRoot|specs}/{initiative-kebab-name}/`.
 4. Make `memory.md` in that folder from `workflow/templates/memory.md`. Write the
    folder path in it. If `memory.md` exists, add to it. Do not make it again.
@@ -75,7 +75,7 @@ Do these steps one time for each initiative:
 - **If something fails, go back. Do not go sideways.** A failed test sends you to the
   problem map. A number that misses its target becomes a lesson, not a fault. A scope
   change in the build comes back to P5 or earlier. Do not repair it in the build stage.
-- **To give work to another model**: use the same method as `/workflow`. Write the brief
+- **To give work to another model**: use the same method as `/development-workflow`. Write the brief
   from `workflow/templates/handoff.md`. Run it with `workflow/bin/agent.sh`. Take the
   roles, the models, and the effort levels from `.spectrum.json`.
 - **Out of scope**: price, market size, sales plans, and unit economics. This loop is

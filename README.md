@@ -1,6 +1,6 @@
 # Skills
 
-Portable agent skills in plain markdown — one folder per skill, entry point `SKILL.md`. Works with Claude Code, Codex, Gemini CLI, OpenCode, and pi.
+Portable agent skills for Product Engineer. Works with Claude Code, Codex, Gemini CLI, OpenCode, and pi.
 
 ## Install
 
@@ -15,7 +15,7 @@ Or from a clone: `./setup.sh`. Either way it asks where to install (global or pe
 | Piece | Command | What it answers |
 | ----- | ------- | --------------- |
 | Product loop | `/product-workflow` | Is this worth building, and for whom? Discovery → validation → prioritization → PRD → metrics. Simple English, for everyone. |
-| Delivery pipeline | `/workflow` | Can we build it, and does it work? Specs → verification → tasks → implement → review → QA, with approval gates and per-feature memory. |
+| Delivery pipeline | `/development-workflow` | Can we build it, and does it work? Specs → verification → tasks → implement → review → QA, with approval gates and per-feature memory. |
 | Orchestrator | `/orchestrator` | Who should do this work? Delegates via four patterns: **advisor** (second opinion), **committee** (two contrasting agents plan), **handoff** (ephemeral blocking transfer), **loop** (worker/verifier until done). |
 
 Each stage is its own skill and also runs standalone:

@@ -1,6 +1,6 @@
 ---
 name: plan-technical-spec
-description: Create an implementation-ready Technical Spec from a Product Spec. Stage 2 of /workflow, after /plan-product-spec. Use when the user asks to design a feature's technical implementation, plan the architecture, or invokes /plan-technical-spec.
+description: Create an implementation-ready Technical Spec from a Product Spec. Stage 2 of /development-workflow, after /plan-product-spec. Use when the user asks to design a feature's technical implementation, plan the architecture, or invokes /plan-technical-spec.
 ---
 
 # Technical Spec Planner

@@ -125,7 +125,7 @@ Every pattern inherits these. The playbooks assume them.
    agent running after its report is read. Every delegation is announced with a
    summary — agent name, role, provider/model, effort, session ID, status — so the
    user can always see who did what (see `patterns/handoff.md`). Scope: this governs
-   one-shot delegations. A process-level pipeline (like `/workflow`) that deliberately
+   one-shot delegations. A process-level pipeline (like `/development-workflow`) that deliberately
    resumes the same agent while iterating on one stage keeps its own reuse policy —
    context continuity there is the point, and that policy wins inside the pipeline.
 

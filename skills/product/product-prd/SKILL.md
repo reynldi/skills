@@ -1,12 +1,12 @@
 ---
 name: product-prd
-description: Write a short PRD that starts with the problem — introduction with 5W1H, success numbers, user stories, requirements with acceptance criteria, and detail per function. Then give it to the /workflow build pipeline. Stage P5 of /product-workflow. Simple English, no product experience needed. Use when the user asks for a PRD, a product spec, a feature spec, a pitch, a PR/FAQ, or invokes /product-prd.
+description: Write a short PRD that starts with the problem — introduction with 5W1H, success numbers, user stories, requirements with acceptance criteria, and detail per function. Then give it to the /development-workflow build pipeline. Stage P5 of /product-workflow. Simple English, no product experience needed. Use when the user asks for a PRD, a product spec, a feature spec, a pitch, a PR/FAQ, or invokes /product-prd.
 ---
 
 # Product PRD
 
 **Stage**: P5 of `/product-workflow`. Before: `/product-prioritization` gives the selected
-work. After: give the PRD to `/workflow`. Its stage `/plan-product-spec` uses the PRD.
+work. After: give the PRD to `/development-workflow`. Its stage `/plan-product-spec` uses the PRD.
 
 **What you need to start**: the selected work and the links to the evidence
 (`discovery.md`, `analysis.md`, `validation.md`, `priorities.md`). If evidence is absent,
@@ -22,7 +22,7 @@ Open the template only when you write the document. The document ends with
 
 **Condition to go forward**: the checks in "Order of work" pass. Then your own review
 passes. Then `metrics.md` exists and the user approves it (stage P6). Then the user
-approves the PRD. Then write Status APPROVED. Then give the PRD to `/workflow` as the
+approves the PRD. Then write Status APPROVED. Then give the PRD to `/development-workflow` as the
 input to stage 1.
 
 The PRD gives the problem and the target result. The PRD does not design the product.
@@ -116,4 +116,4 @@ Repair the document. Then show it to the user for approval.
   exist.
 - The document is not longer than the limit in the table above.
 - After approval: write Status APPROVED. Write the decision and the reason in `memory.md`.
-  Then offer to start `/workflow`.
+  Then offer to start `/development-workflow`.

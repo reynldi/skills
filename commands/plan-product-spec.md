@@ -1,6 +1,6 @@
 ---
 name: plan-product-spec
-description: Stage 1 of /workflow — UX-centric Product Spec from a feature idea, user problem, or goal.
+description: Stage 1 of /development-workflow — UX-centric Product Spec from a feature idea, user problem, or goal.
 argument-hint: "<feature name, user problem, or goal>"
 ---
 

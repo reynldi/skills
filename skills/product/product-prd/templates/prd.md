@@ -143,4 +143,4 @@ One row for each requirement.
 
 ---
 
-**Status**: DRAFT <!-- DRAFT | APPROVED — write APPROVED only after the user approves. Then give the PRD to /workflow. -->
+**Status**: DRAFT <!-- DRAFT | APPROVED — write APPROVED only after the user approves. Then give the PRD to /development-workflow. -->

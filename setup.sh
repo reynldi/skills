@@ -132,7 +132,7 @@ block="$MARK_START
 Reusable skills live in \`$skills_dst\` — one folder per skill, entry point \`SKILL.md\`.
 When a task matches a skill, read its \`SKILL.md\` and follow it exactly.
 
-Flagship: the feature delivery pipeline. Read \`$skills_dst/workflow/SKILL.md\` first —
+Flagship: the feature delivery pipeline. Read \`$skills_dst/development-workflow/SKILL.md\` first —
 it coordinates plan-product-spec -> plan-technical-spec -> plan-contract-spec ->
 plan-verification -> plan-ready -> plan-implement -> impl-review -> qa-test,
 with approval gates, per-feature memory, and multi-model delegation.
@@ -296,7 +296,7 @@ JSON
     echo "spectrum: wrote $spectrum_file"
   fi
 elif [ "$spectrum_mode" = ask ]; then
-  echo "spectrum: no TTY — skipped .spectrum.json wizard (re-run with --spectrum, or copy skills/development/workflow/templates/spectrum.json)"
+  echo "spectrum: no TTY — skipped .spectrum.json wizard (re-run with --spectrum, or copy skills/development/development-workflow/templates/spectrum.json)"
 fi
 
 echo "done."

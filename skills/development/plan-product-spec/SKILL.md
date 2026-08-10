@@ -1,11 +1,11 @@
 ---
 name: plan-product-spec
-description: Write a UX-centric Product Spec (feature/UX spec) from a feature idea, user problem, or goal — or from an APPROVED prd.md handed off by /product-workflow (for a problem/outcome-level PRD, use /product-prd) — flows, stories, states, edge cases; no KPIs, rollout, or implementation. Stage 1 of the /workflow pipeline. Use when the user asks to spec a feature or invokes /plan-product-spec.
+description: Write a UX-centric Product Spec (feature/UX spec) from a feature idea, user problem, or goal — or from an APPROVED prd.md handed off by /product-workflow (for a problem/outcome-level PRD, use /product-prd) — flows, stories, states, edge cases; no KPIs, rollout, or implementation. Stage 1 of the /development-workflow pipeline. Use when the user asks to spec a feature or invokes /plan-product-spec.
 ---
 
 # Product Spec Planner
 
-**Stage**: 1 (Planning) of the feature pipeline — see /workflow. Next: /plan-technical-spec.
+**Stage**: 1 (Planning) of the feature pipeline — see /development-workflow. Next: /plan-technical-spec.
 **Input**: feature name, user problem, or goal (from the user) — or an APPROVED `prd.md` handed off from /product-workflow. When a prd.md exists, it is the primary input: treat its problem, primary metric, appetite, and non-goals as fixed constraints (do not relitigate them), and use its initiative folder as the feature folder without re-confirmation.
 **Output**: `product-spec.md` in the feature folder — structure: `templates/product-spec.md` (read it only when writing the spec).
 **Gate**: Final Check passes and the user approves the spec (or explicitly accepts its open questions) — then set the spec's Status footer to APPROVED. Standalone use: suggest the next stage, don't run it.

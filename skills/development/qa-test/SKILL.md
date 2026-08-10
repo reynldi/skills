@@ -1,6 +1,6 @@
 ---
 name: qa-test
-description: QA acceptance testing of an implemented feature against the Product Spec — run suites, execute each story's Independent Test, edge cases, contract conformance; writes qa-report.md. Final stage of /workflow, after /impl-review. Use when the user asks to QA or acceptance-test a feature, or invokes /qa-test.
+description: QA acceptance testing of an implemented feature against the Product Spec — run suites, execute each story's Independent Test, edge cases, contract conformance; writes qa-report.md. Final stage of /development-workflow, after /impl-review. Use when the user asks to QA or acceptance-test a feature, or invokes /qa-test.
 ---
 
 # QA Test

@@ -1,6 +1,6 @@
 ---
 name: plan-ready
-description: Final planning gate — verify specs are consistent, then generate tasks.md organized by user story with checkpoints; fails without generating tasks while Blocking/High issues remain. Stage 5 of /workflow, before /plan-implement. Use when the user asks to generate implementation tasks or invokes /plan-ready.
+description: Final planning gate — verify specs are consistent, then generate tasks.md organized by user story with checkpoints; fails without generating tasks while Blocking/High issues remain. Stage 5 of /development-workflow, before /plan-implement. Use when the user asks to generate implementation tasks or invokes /plan-ready.
 ---
 
 # Plan Ready

@@ -30,12 +30,12 @@ done
 [ -n "$brief" ] && [ -f "$brief" ] || { echo "usage: handoff.sh --brief <handoff.md> --provider <p>[/<model>] [...]" >&2; exit 2; }
 [ -n "$provider_spec" ] || { echo "--provider required (resolve via backend.sh first)" >&2; exit 2; }
 
-# Locate the shared agent.sh runner: repo layout (skills/development/workflow/bin)
+# Locate the shared agent.sh runner: repo layout (skills/development/development-workflow/bin)
 # or installed layout (sibling skill: <skills-dir>/workflow/bin). AGENT_SH= overrides.
 here="$(cd "$(dirname "$0")" && pwd)"
 if [ -z "${AGENT_SH:-}" ]; then
-  for c in "$here/../../../skills/development/workflow/bin/agent.sh" \
-           "$here/../../workflow/bin/agent.sh"; do
+  for c in "$here/../../../skills/development/development-workflow/bin/agent.sh" \
+           "$here/../../development-workflow/bin/agent.sh"; do
     [ -x "$c" ] && AGENT_SH="$c" && break
   done
 fi

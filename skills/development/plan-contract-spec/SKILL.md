@@ -1,6 +1,6 @@
 ---
 name: plan-contract-spec
-description: Create or update contract-spec.md (REST/gRPC/Event contracts) from a Technical Spec. Stage 3 of /workflow, after /plan-technical-spec. Use when the user asks to define API or event contracts, write a contract spec, or invokes /plan-contract-spec.
+description: Create or update contract-spec.md (REST/gRPC/Event contracts) from a Technical Spec. Stage 3 of /development-workflow, after /plan-technical-spec. Use when the user asks to define API or event contracts, write a contract spec, or invokes /plan-contract-spec.
 ---
 
 # Contract Spec Planner

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# agent.sh — minimal multi-provider agent runner for the /workflow pipeline.
+# agent.sh — minimal multi-provider agent runner for the /development-workflow pipeline.
 #
 # Usage:
 #   agent.sh list                                      # show installed providers

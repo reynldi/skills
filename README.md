@@ -20,8 +20,8 @@ Or from a clone: `./setup.sh`. Either way it asks where to install (global or pe
 
 Each stage is its own skill and also runs standalone:
 
-- **Product** (`skills/product/`): `/product-discovery` → `/product-analysis` → `/product-validation` → `/product-prioritization` → `/product-prd` → `/product-metrics`
-- **Development** (`skills/development/`): `/plan-product-spec` → `/plan-technical-spec` → `/plan-contract-spec` → `/plan-verification` → `/plan-ready` → `/plan-implement` → `/impl-review` → `/qa-test`
+- **Product** (`skills/product/`): `/product-workflow` coordinates `/product-discovery` → `/product-analysis` → `/product-validation` → `/product-prioritization` → `/product-prd` → `/product-metrics`
+- **Development** (`skills/development/`): `/development-workflow` coordinates `/plan-product-spec` → `/plan-technical-spec` → `/plan-contract-spec` → `/plan-verification` → `/plan-ready` → `/plan-implement` → `/impl-review` → `/qa-test`
 
 An APPROVED `prd.md` connects product to delivery. The orchestrator uses [Paseo](https://paseo.sh) when its daemon is running, native subagents otherwise. Every delegation is ephemeral and reports a summary: agent, role, provider/model, effort, session ID. Helpers: `workflow/orchestrator/bin/{backend,handoff,loop}.sh`.
 

@@ -15,10 +15,12 @@ set -euo pipefail
 REPO="${RND_SKILLS_REPO:-https://github.com/reynldi/skills}"
 REF="${RND_SKILLS_REF:-main}"
 
+# No scope given: let setup.sh ask interactively when a terminal is present;
+# default to --global only when headless.
 args=("$@")
 case " $* " in
   *" --global "*|*" --project "*) ;;
-  *) args=(--global "$@") ;;
+  *) (exec 3</dev/tty) 2>/dev/null || args=(--global "$@") ;;
 esac
 
 tmp="$(mktemp -d)"

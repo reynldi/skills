@@ -55,10 +55,14 @@ curl -fsSL https://raw.githubusercontent.com/reynldi/skills/main/install.sh | ba
 From a clone:
 
 ```sh
+./setup.sh                                   # interactive: asks global vs project + skills dir
 ./setup.sh --global                          # all agents, user-wide
 ./setup.sh --project ~/code/myrepo           # all agents, one repo
 ./setup.sh --global --agents claude,codex    # subset
+./setup.sh --project . --skills-dir .agents  # neutral dot-dir instead of .claude
 ```
+
+Run without a scope flag and `setup.sh` asks where to install — global (user-wide) or init inside a project — and which dot-dir convention holds the skills: `.claude` (default; Claude Code auto-loads it) or `.agents` / a custom dir (agents reach it via the pointer blocks).
 
 | Agent    | Skills (copied)                     | Wiring                                          |
 | -------- | ----------------------------------- | ----------------------------------------------- |
@@ -70,7 +74,7 @@ From a clone:
 
 Pointer blocks are marker-delimited and idempotent — re-run `setup.sh` after updating skills.
 
-After wiring, `setup.sh` offers to init **`.spectrum.json`** with a step-by-step wizard: pick the workflow roles to configure (planner, implementer, reviewer, qa, researcher, coordinator), set provider / model / effort per role (effort defaults to medium; planner and reviewer to high), then the remaining settings (context-rotation %, specs root, yolo). It prompts on your terminal even under `curl | bash`, keeps an existing file unless you confirm overwrite, and skips itself when headless — `--spectrum` forces it, `--no-spectrum` suppresses it. Project installs write to the project root; global installs write to the current directory.
+After wiring, `setup.sh` offers to init **`.spectrum.json`** with a step-by-step wizard: pick a workflow role to set up (planner, implementer, reviewer, qa, researcher, coordinator), configure its provider / model / effort (effort defaults to medium; planner and reviewer to high) — after each role it offers the remaining ones so you continue or finish — then the last settings (context-rotation %, specs root, yolo). It prompts on your terminal even under `curl | bash`, keeps an existing file unless you confirm overwrite, and skips itself when headless — `--spectrum` forces it, `--no-spectrum` suppresses it. Project installs write to the project root; global installs write to the current directory.
 
 ## Configuration: `.spectrum.json`
 

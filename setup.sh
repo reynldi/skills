@@ -3,24 +3,29 @@
 # globally or per-project.
 #
 # Usage:
+#   ./setup.sh                                  # interactive: asks scope + skills dir
 #   ./setup.sh --global  [--agents claude,codex,gemini,opencode,pi]
 #   ./setup.sh --project <dir> [--agents ...]
+#   ./setup.sh ... [--skills-dir .claude|.agents|<custom>]
 #   ./setup.sh ... [--spectrum | --no-spectrum]
 #
 # What it does:
-#   1. Copies every skill (skills/*/<name>/ containing SKILL.md) into the
-#      canonical skills dir — global: ~/.claude/skills, project: <dir>/.claude/skills.
-#      Skills are plain markdown, so every agent reads them from there.
-#   2. Per agent wiring:
+#   1. Asks where to install when not told: global (user-wide) or init in a
+#      project, and which dot-dir convention holds the skills (.claude default,
+#      .agents, or custom).
+#   2. Copies every skill (skills/*/<name>/ and workflow/<name>/ containing
+#      SKILL.md) into <base>/<skills-dir>/skills.
+#   3. Per agent wiring:
 #        claude    slash commands  -> ~/.claude/commands | <dir>/.claude/commands
 #        codex     pointer block   -> ~/.codex/AGENTS.md | <dir>/AGENTS.md
 #        gemini    pointer block   -> ~/.gemini/GEMINI.md | <dir>/GEMINI.md
 #        opencode  pointer block   -> ~/.config/opencode/AGENTS.md | <dir>/AGENTS.md
 #        pi        pointer block   -> <dir>/AGENTS.md (project only)
 #      Pointer blocks are idempotent (marker-delimited; re-running replaces them).
-#   3. Offers to init .spectrum.json (per-role provider/model/effort for the
-#      pipelines) via an interactive wizard. Needs a TTY (works under curl|bash);
-#      --spectrum forces the wizard (reads stdin if no TTY), --no-spectrum skips.
+#   4. Offers to init .spectrum.json (per-role provider/model/effort) via a
+#      step-by-step wizard: configure a role, then continue with another role
+#      or finish. Prompts on /dev/tty (works under curl|bash); --spectrum
+#      forces the wizard, --no-spectrum skips it.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -28,29 +33,83 @@ MARK_START='<!-- rnd-skills:start -->'
 MARK_END='<!-- rnd-skills:end -->'
 
 usage() {
-  sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,29p' "$0" | sed 's/^# \{0,1\}//'
   exit 1
 }
 
-scope="" dir="" agents="claude,codex,gemini,opencode,pi" spectrum_mode=ask
+scope="" dir="" agents="claude,codex,gemini,opencode,pi" spectrum_mode=ask skills_base=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --global) scope=global ;;
     --project) scope=project; dir="${2:?--project needs a directory}"; shift ;;
     --agents) agents="${2:?--agents needs a list}"; shift ;;
+    --skills-dir) skills_base="${2:?--skills-dir needs a directory name}"; shift ;;
     --spectrum) spectrum_mode=yes ;;
     --no-spectrum) spectrum_mode=no ;;
     *) usage ;;
   esac
   shift
 done
-[ -n "$scope" ] || usage
+
+# --- interactive layer: prefer the real terminal; fall back to piped stdin ---
+interactive=0 GOT_EOF=0
+if (exec 3</dev/tty) 2>/dev/null; then
+  exec 3</dev/tty; interactive=1
+elif [ ! -t 0 ]; then
+  exec 3<&0; interactive=1          # piped answers (tests, scripting); EOF -> defaults
+fi
+
+ask() { # ask VAR "prompt" "default" -> sets $VAR; sets GOT_EOF=1 on end of input
+  local _var="$1" _ans
+  printf '%s' "$2" >&2
+  if ! IFS= read -r _ans <&3; then _ans=""; GOT_EOF=1; fi
+  [ -n "$_ans" ] || _ans="$3"
+  eval "$_var=\$_ans"
+}
+
+lower() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
+
+# --- scope: flag, or ask, or usage ---
+if [ -z "$scope" ]; then
+  [ "$interactive" = 1 ] || usage
+  echo "Install where?"
+  echo "  1) global  — user-wide, for every project"
+  echo "  2) project — init inside one project directory"
+  ask sc "Choose [1]: " 1
+  [ "$GOT_EOF" = 1 ] && usage        # headless with no scope: keep the old error
+  case "$sc" in
+    1|g|global) scope=global ;;
+    2|p|project)
+      scope=project
+      ask dir "Project directory [$PWD]: " "$PWD"
+      ;;
+    *) echo "unknown choice: $sc" >&2; exit 2 ;;
+  esac
+fi
 if [ "$scope" = project ]; then
   [ -d "$dir" ] || { echo "no such directory: $dir" >&2; exit 2; }
   dir="$(cd "$dir" && pwd)"
 fi
 
-if [ "$scope" = global ]; then skills_dst="$HOME/.claude/skills"; else skills_dst="$dir/.claude/skills"; fi
+# --- skills dir convention: flag, or ask, default .claude ---
+if [ -z "$skills_base" ]; then
+  if [ "$interactive" = 1 ] && [ "$GOT_EOF" = 0 ]; then
+    echo "Skills directory convention?"
+    echo "  1) .claude — default; Claude Code loads it natively"
+    echo "  2) .agents — neutral convention (agents find it via pointer blocks)"
+    ask sb "Choose, or type a custom dot-dir [1]: " 1
+    case "$sb" in
+      1|.claude) skills_base=.claude ;;
+      2|.agents) skills_base=.agents ;;
+      *) skills_base="${sb%/}" ;;
+    esac
+  else
+    skills_base=.claude
+  fi
+fi
+if [ "$scope" = global ]; then base="$HOME"; else base="$dir"; fi
+skills_dst="$base/$skills_base/skills"
+[ "$skills_base" = .claude ] || echo "note: outside .claude, Claude Code won't auto-load skills — agents reach them via the pointer blocks"
 
 # 1. Copy all skills (flatten category level: skills/<category>/<name> -> <dst>/<name>;
 #    also root-level workflow/<name>, e.g. the orchestrator)
@@ -116,76 +175,89 @@ esac
 if [ "$scope" = project ]; then spectrum_dir="$dir"; else spectrum_dir="$PWD"; fi
 spectrum_file="$spectrum_dir/.spectrum.json"
 
-interactive=0
-if [ "$spectrum_mode" != no ]; then
-  if (exec 3</dev/tty) 2>/dev/null; then
-    exec 3</dev/tty; interactive=1
-  elif [ "$spectrum_mode" = yes ]; then
-    exec 3<&0; interactive=1        # forced: read answers from stdin (tests, scripting)
-  fi
-fi
-
-ask() { # $1=prompt $2=default -> echoes answer or default
-  local ans
-  printf '%s' "$1" >&2
-  IFS= read -r ans <&3 || ans=""
-  [ -n "$ans" ] && printf '%s\n' "$ans" || printf '%s\n' "$2"
+role_of() { # $1 = selection token -> echoes role name or nothing
+  case "$1" in
+    1|planner) echo planner ;; 2|implementer) echo implementer ;; 3|reviewer) echo reviewer ;;
+    4|qa) echo qa ;; 5|researcher) echo researcher ;; 6|coordinator) echo coordinator ;;
+  esac
 }
 
-if [ "$interactive" = 1 ]; then
+num_of() { # $1 = role name -> its menu number
+  case "$1" in
+    planner) echo 1 ;; implementer) echo 2 ;; reviewer) echo 3 ;;
+    qa) echo 4 ;; researcher) echo 5 ;; coordinator) echo 6 ;;
+  esac
+}
+
+configure_role() { # $1 = role name; edits p_/m_/e_ vars
+  local r="$1" dp dm de pv mv ev
+  eval "dp=\$p_$r; dm=\$m_$r; de=\$e_$r"
+  echo "— $r —"
+  ask pv "  provider (claude|codex|gemini|opencode|pi) [$dp]: " "$dp"
+  case "$pv" in claude|codex|gemini|opencode|pi) ;; *) echo "  note: '$pv' is not a known provider; keeping it as written" ;; esac
+  ask mv "  model (empty = provider default) [${dm:-provider default}]: " "$dm"
+  ask ev "  effort (low|medium|high) [$de]: " "$de"
+  case "$ev" in low|medium|high) ;; *) echo "  invalid effort '$ev' — using $de"; ev="$de" ;; esac
+  eval "p_$r=\$pv; m_$r=\$mv; e_$r=\$ev; done_$r=1"
+  echo "  + $r configured ($pv${mv:+/$mv}, effort $ev)"
+}
+
+if [ "$interactive" = 1 ] && [ "$spectrum_mode" != no ]; then
   wantit=y
   if [ "$spectrum_mode" = ask ]; then
-    wantit="$(ask "Init $spectrum_file — per-role provider/model/effort for the pipelines? [y/N] " n)"
+    ask wantit "Init $spectrum_file — per-role provider/model/effort for the pipelines? [y/N] " n
   fi
-  case "$(printf '%s' "$wantit" | tr '[:upper:]' '[:lower:]')" in y|yes) ;; *) wantit=n ;; esac
+  case "$(lower "$wantit")" in y|yes) ;; *) wantit=n ;; esac
   if [ "$wantit" != n ] && [ -f "$spectrum_file" ]; then
-    ow="$(ask ".spectrum.json exists — overwrite? [y/N] " n)"
-    case "$(printf '%s' "$ow" | tr '[:upper:]' '[:lower:]')" in y|yes) ;; *) wantit=n; echo "spectrum: kept existing $spectrum_file" ;; esac
+    ask ow ".spectrum.json exists — overwrite? [y/N] " n
+    case "$(lower "$ow")" in y|yes) ;; *) wantit=n; echo "spectrum: kept existing $spectrum_file" ;; esac
   fi
 
   if [ "$wantit" != n ]; then
     # role defaults (mirror templates/spectrum.json)
     for r in coordinator researcher planner implementer reviewer qa; do
-      eval "p_$r=claude m_$r= e_$r=medium"
+      eval "p_$r=claude m_$r= e_$r=medium done_$r=0"
     done
     p_reviewer=codex; e_planner=high; e_reviewer=high
 
     echo ""
-    echo "Step 1 — your workflow (which roles to configure; the rest keep defaults)"
+    echo "Step 1 — your workflow (pick a role to set up; you can add more after each one)"
     echo "  1) planner      — Plan: product/technical/contract specs, PRD, tasks"
     echo "  2) implementer  — Implement: code, per-task commits"
     echo "  3) reviewer     — Review: spec verification, implementation review"
     echo "  4) qa           — QA: test plan + execution"
     echo "  5) researcher   — Research: discovery, analysis, validation"
     echo "  6) coordinator  — pipeline coordination (usually this session)"
-    sel="$(ask "Roles to configure (numbers, Enter = 1 2 3 4): " "1 2 3 4")"
-    sel="$(printf '%s' "$sel" | tr ',' ' ')"
+    ask sel "Start with (numbers, Enter = 1): " 1
 
     echo ""
     echo "Step 2 — provider, model, effort per role (Enter keeps the default)"
-    for n in $sel; do
-      case "$n" in
-        1|planner) r=planner ;; 2|implementer) r=implementer ;; 3|reviewer) r=reviewer ;;
-        4|qa) r=qa ;; 5|researcher) r=researcher ;; 6|coordinator) r=coordinator ;;
-        *) echo "  (unknown selection: $n — skipped)"; continue ;;
-      esac
-      eval "dp=\$p_$r; dm=\$m_$r; de=\$e_$r"
-      echo "— $r —"
-      pv="$(ask "  provider (claude|codex|gemini|opencode|pi) [$dp]: " "$dp")"
-      case "$pv" in claude|codex|gemini|opencode|pi) ;; *) echo "  note: '$pv' is not a known provider; keeping it as written" ;; esac
-      mv="$(ask "  model (empty = provider default) [${dm:-provider default}]: " "$dm")"
-      ev="$(ask "  effort (low|medium|high) [$de]: " "$de")"
-      case "$ev" in low|medium|high) ;; *) echo "  invalid effort '$ev' — using $de"; ev="$de" ;; esac
-      eval "p_$r=\$pv; m_$r=\$mv; e_$r=\$ev"
+    while :; do
+      for n in $(printf '%s' "$sel" | tr ',' ' '); do
+        r="$(role_of "$n")"
+        [ -n "$r" ] || { echo "  (unknown selection: $n — skipped)"; continue; }
+        if eval "[ \"\$done_$r\" = 1 ]"; then echo "  ($r already configured — skipped)"; continue; fi
+        configure_role "$r"
+      done
+      # offer the remaining roles, or finish
+      remaining=""
+      for r in planner implementer reviewer qa researcher coordinator; do
+        eval "d=\$done_$r"
+        [ "$d" = 1 ] || remaining="$remaining $(num_of "$r")) $r "
+      done
+      [ -n "$remaining" ] || { echo "All roles configured."; break; }
+      ask sel "Continue with another role — ${remaining# } — or Enter to finish: " ""
+      [ -n "$sel" ] || break
     done
+    echo "(unconfigured roles keep the template defaults)"
 
     echo ""
     echo "Step 3 — other settings"
-    rotate="$(ask "  Rotate an agent when its context reaches N% [75]: " 75)"
+    ask rotate "  Rotate an agent when its context reaches N% [75]: " 75
     case "$rotate" in ''|*[!0-9]*) echo "  invalid number — using 75"; rotate=75 ;; esac
-    specs="$(ask "  Specs root directory [specs]: " specs)"
-    yolo_ans="$(ask "  Unguarded delegates (yolo — isolated worktrees only)? [y/N] " n)"
-    case "$(printf '%s' "$yolo_ans" | tr '[:upper:]' '[:lower:]')" in y|yes) yolo=true ;; *) yolo=false ;; esac
+    ask specs "  Specs root directory [specs]: " specs
+    ask yolo_ans "  Unguarded delegates (yolo — isolated worktrees only)? [y/N] " n
+    case "$(lower "$yolo_ans")" in y|yes) yolo=true ;; *) yolo=false ;; esac
 
     cat > "$spectrum_file" <<JSON
 {

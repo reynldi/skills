@@ -34,4 +34,4 @@ else
   mv "$tmp"/*-skills-* "$tmp/skills" 2>/dev/null || mv "$tmp"/* "$tmp/skills"
 fi
 
-bash "$tmp/skills/setup.sh" "${args[@]}"
+bash "$tmp/skills/setup.sh" ${args[@]+"${args[@]}"}

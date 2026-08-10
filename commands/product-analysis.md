@@ -1,7 +1,7 @@
 ---
 name: product-analysis
-description: Stage P2 (on demand) of /product-workflow — decision-anchored research: teardowns, review mining, win/loss, leading signals.
-argument-hint: "<the product decision it serves, or initiative folder>"
+description: Stage P2 of /product-workflow (optional) — research for one decision: use the products of competitors, read their reviews, read why deals were won or lost, find what comes next.
+argument-hint: "<the decision it serves, or the initiative folder>"
 ---
 
 Invoke the `product-analysis` skill for: $ARGUMENTS

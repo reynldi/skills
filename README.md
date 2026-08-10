@@ -4,23 +4,27 @@ A portable, repo-agnostic collection of agent skills. Skills are plain markdown 
 
 Two orchestrated pipelines share one initiative folder, one memory, and one config:
 
-- **`/product-workflow`** — the product loop (de-risks *valuable* and *viable*): Discovery → Analysis → Validation → Prioritization → PRD → Metrics → build handoff → Measure → back to Discovery.
-- **`/workflow`** — the delivery pipeline (de-risks *usable* and *feasible*): planning through implementation, review, and QA — with approval gates, per-feature memory, and multi-model delegation.
+- **`/product-workflow`** — the product loop. It answers one question: is this worth the work, and for which users? Learn the problem → research → test the risks → select what to build → PRD → numbers → build → measure → start again.
+- **`/workflow`** — the delivery pipeline. It answers a different question: can we build it, and does it work? Plan, implement, review, and test — with approval gates, memory per feature, and work for more than one model.
 
-The seam: an APPROVED `prd.md` (problem + outcome, never a feature list) is what crosses from product to delivery.
+The connection between them: an APPROVED `prd.md` (the problem and the target result, never a feature list) goes from product to delivery.
+
+Alongside the pipelines sits **`/orchestrator`** — a global, backend-agnostic multi-agent coordinator (advisor, committee, handoff, loop) at `workflow/orchestrator/`.
 
 ## The product loop
 
-| #  | Stage          | Skill / command           | Artifact      | Core models |
-| -- | -------------- | ------------------------- | ------------- | ----------- |
-| P1 | Discovery      | `/product-discovery`      | discovery.md  | Continuous Discovery + Opportunity Solution Tree (Torres), Mom Test, JTBD switch interviews |
-| P2 | Analysis       | `/product-analysis`       | analysis.md   | competitor tiering, teardowns, review mining, win/loss, leading signals |
-| P3 | Validation     | `/product-validation`     | validation.md | Assumptions Mapping (Bland), fake doors, prototype tests |
-| P4 | Prioritization | `/product-prioritization` | priorities.md | opportunity scoring (ODI), evidence-cited RICE, Kano, Now-Next-Later |
-| P5 | PRD            | `/product-prd`            | prd.md        | Lenny 1-pager / Shape Up pitch / Amazon PR-FAQ, by bet size |
-| P6 | Metrics        | `/product-metrics`        | metrics.md    | North Star + inputs, Google HEART, leading/lagging, guardrails |
+The product skills use Simplified Technical English (ASD-STE100). All persons can use them — engineers, marketers, and founders. No product experience is necessary. The rules are in `skills/product/product-workflow/STE.md`. The special words are in `skills/product/product-workflow/GLOSSARY.md`.
 
-Business strategy (pricing, TAM, GTM, unit economics) is deliberately out of scope.
+| #  | Stage | Skill / command | Document | What it does |
+| -- | ----- | --------------- | -------- | ------------ |
+| P1 | Learn the problem | `/product-discovery`      | discovery.md  | Interviews for stories, one page per interview, a map of problems and possible solutions |
+| P2 | Research (optional) | `/product-analysis`     | analysis.md   | Competitor groups, use their product, read their reviews, won and lost deals, what comes next |
+| P3 | Test the risks | `/product-validation`     | validation.md | A list of assumptions, then fake doors, click models, and manual service tests |
+| P4 | Select what to build | `/product-prioritization` | priorities.md | Scores for problems or solutions, a source for each number, a Now / Next / Later roadmap |
+| P5 | Write the PRD | `/product-prd`            | prd.md        | Introduction with 5W1H, success numbers, user stories, requirements with acceptance criteria, detail per function |
+| P6 | Set the numbers | `/product-metrics`        | metrics.md    | One main number, weekly numbers, one early signal, and the things that must not become worse |
+
+Price, market size, sales plans, and unit economics are out of scope.
 
 ## The delivery pipeline
 
@@ -40,6 +44,16 @@ Business strategy (pricing, TAM, GTM, unit economics) is deliberately out of sco
 
 ## Install
 
+One-liner (no clone needed; defaults to `--global`, all agents):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/reynldi/skills/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/reynldi/skills/main/install.sh | bash -s -- --agents claude,codex
+curl -fsSL https://raw.githubusercontent.com/reynldi/skills/main/install.sh | bash -s -- --project ~/code/myrepo
+```
+
+From a clone:
+
 ```sh
 ./setup.sh --global                          # all agents, user-wide
 ./setup.sh --project ~/code/myrepo           # all agents, one repo
@@ -55,6 +69,8 @@ Business strategy (pricing, TAM, GTM, unit economics) is deliberately out of sco
 | pi       | same copy                           | pointer block in `<dir>/AGENTS.md` (project only) |
 
 Pointer blocks are marker-delimited and idempotent — re-run `setup.sh` after updating skills.
+
+After wiring, `setup.sh` offers to init **`.spectrum.json`** with a step-by-step wizard: pick the workflow roles to configure (planner, implementer, reviewer, qa, researcher, coordinator), set provider / model / effort per role (effort defaults to medium; planner and reviewer to high), then the remaining settings (context-rotation %, specs root, yolo). It prompts on your terminal even under `curl | bash`, keeps an existing file unless you confirm overwrite, and skips itself when headless — `--spectrum` forces it, `--no-spectrum` suppresses it. Project installs write to the project root; global installs write to the current directory.
 
 ## Configuration: `.spectrum.json`
 
@@ -83,6 +99,51 @@ skills/development/workflow/bin/agent.sh codex/gpt-5.1-codex \
 - **Reuse agents**: iterating on the same stage continues the same agent — `AGENT_RESUME=1 agent.sh …` resumes the provider's last session (claude/codex/opencode/pi). Spawn fresh only at ~75% context use, on a stage change, or when fresh eyes are the point.
 - Guarded defaults (sandbox / edit-only approval); `AGENT_YOLO=1` removes guardrails — only inside an isolated worktree or container.
 
+## The orchestrator
+
+`/orchestrator` (root-level `workflow/orchestrator/`) delegates work to other agents with the right pattern:
+
+| Pattern | Use when | Playbook |
+| ------- | -------- | -------- |
+| Advisor   | You want an outside judgment but keep driving the work | `patterns/advisor.md` |
+| Committee | Stuck, looping, or facing a hard planning problem — two contrasting high-reasoning agents plan in parallel | `patterns/committee.md` |
+| Handoff   | The work moves to another agent entirely — ephemeral, blocking, reports back | `patterns/handoff.md` |
+| Loop      | Retry-until-verified with an objective done-condition ("babysit this PR", "tests to green") | `patterns/loop.md` |
+
+Backend-agnostic: it uses [Paseo](https://paseo.sh) when its daemon is running, native subagents otherwise, and degrades to an inline fallback (never faking a second agent). Delegates are **ephemeral**: launched blocking, they report and are torn down — no agent outlives its task — and every delegation emits a summary (agent name, role, provider/model, effort, session ID, status) to the console and `<brief>.summary.json`.
+
+Deterministic helpers in `workflow/orchestrator/bin/`:
+
+```sh
+bin/backend.sh                                        # resolve backend + role→provider map
+bin/handoff.sh --brief handoff.md --provider codex \
+               --role delegate --effort high          # one ephemeral blocking delegation
+bin/loop.sh --worker claude --worker-prompt w.md \
+            --verify-check "npm test" --max-iterations 10   # bounded worker/verifier loop
+```
+
+`loop.sh` mirrors Paseo's LoopService guarantees: verification and bounds are mandatory, every iteration logged to disk. When Paseo is available, prefer `paseo loop run`.
+
+## The delegation principle
+
+**One owning context, independent verification, escalate on evidence.** Judgment (plan, verify, arbitrate) stays in one frontier-model context from start to finish; execution is delegated down to ephemeral cheaper models only when size makes it pay; "done" is always declared by a check the author didn't produce; and separation of roles is bought reactively — when a failure signal demands it — never as up-front ceremony.
+
+```mermaid
+flowchart TD
+    T[Task] --> S{Size & subtlety}
+    S -->|"small or subtle<br/>(≤ ~3 files, tricky invariants)<br/>and context < 60%"| I["Stay inline<br/>one frontier context<br/>plans + implements"]
+    S -->|"large or mechanical<br/>(bulk edits, parallel stories)<br/>or context pressure"| D["Delegate down<br/>ephemeral cheap-model handoff<br/>plan artifact = the brief"]
+    I --> V{"Verify — cheapest sufficient check<br/>tests/typecheck → cheap-model review<br/>→ cross-model review"}
+    D --> V
+    V -->|pass| OK["Done<br/>declared by the check,<br/>never by the author"]
+    V -->|"same cause<br/>fails twice"| E1["Fresh eyes /<br/>promote implementer tier"]
+    V -->|"~3 rounds,<br/>no convergence"| E2["Committee<br/>(two contrasting agents,<br/>full history)"]
+    E1 --> V
+    E2 --> V
+```
+
+Why this shape: the handoff cost is roughly **fixed** (brief + delegate re-discovery + verification) while the work's cost **scales with the task** — so small tasks are cheapest inline even at frontier prices, and only large or mechanical work earns its delegation. Cross-provider fresh eyes justify delegating *review*, never *implementation*. The rule is codified in the orchestrator's "Delegate or stay inline" section and the workflow skill's sizing rule.
+
 ## Principles
 
 - Product Spec defines behavior; project conventions define implementation style; specs are the source of truth during implementation.
@@ -98,8 +159,15 @@ skills/
   development/    delivery pipeline (plan-*, impl-review, qa-test, workflow) + others
   product/        product loop (product-discovery … product-workflow)
   general/        general skills
+workflow/
+  orchestrator/   global multi-agent orchestrator (patterns/ + bin/)
 commands/         Claude Code slash commands (thin pointers to skills)
 setup.sh          multi-agent installer (global or per-project)
+install.sh        curl one-liner bootstrap (fetches the repo, runs setup.sh)
 ```
 
 Each skill keeps its output templates in `templates/` (read only at write time — keeps every invocation cheap); the workflow skill also ships `bin/agent.sh`.
+
+## Credits
+
+The orchestrator's patterns and principles — advisor, committee, handoff, and loop; self-contained zero-context briefings, deliberate provider contrast, no-edits analysis agents, trust-the-wait, and hard bounds on loops — are inspired by [Paseo](https://paseo.sh) ([getpaseo/paseo](https://github.com/getpaseo/paseo)) and its orchestration skills.

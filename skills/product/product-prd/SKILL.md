@@ -1,40 +1,119 @@
 ---
 name: product-prd
-description: Write a lean, problem-first PRD for the chosen bet — 1-pager, Shape Up pitch, or PR/FAQ by bet size — and hand it to the /workflow development pipeline. Stage P5 of /product-workflow. Use when the user asks for a PRD, product one-pager, pitch, PR/FAQ, or invokes /product-prd.
+description: Write a short PRD that starts with the problem — introduction with 5W1H, success numbers, user stories, requirements with acceptance criteria, and detail per function. Then give it to the /workflow build pipeline. Stage P5 of /product-workflow. Simple English, no product experience needed. Use when the user asks for a PRD, a product spec, a feature spec, a pitch, a PR/FAQ, or invokes /product-prd.
 ---
 
 # Product PRD
 
-**Stage**: P5 of the product loop (/product-workflow). Prev: /product-prioritization (the approved bet) · Next: handoff to /workflow (its /plan-product-spec consumes this PRD).
-**Input**: the chosen bet + evidence links (`discovery.md`, `analysis.md`, `validation.md`, `priorities.md`). Missing evidence → say what's unvalidated, don't fabricate confidence.
-**Output**: `prd.md` in the initiative folder — templates by bet size: `templates/prd.md` (1-pager and pitch), `templates/pr-faq.md` (new-product bets). Ends with `**Status**: DRAFT | APPROVED`.
-**Gate**: gating order below passes → self-review passes → `metrics.md` (P6, /product-metrics) defined and approved → user approves → set Status APPROVED → hand off to /workflow with this PRD as stage-1 input.
+**Stage**: P5 of `/product-workflow`. Before: `/product-prioritization` gives the selected
+work. After: give the PRD to `/workflow`. Its stage `/plan-product-spec` uses the PRD.
 
-The PRD frames the problem and the outcome. It does not design the product — screens, fields, and flows belong to /plan-product-spec; architecture to /plan-technical-spec.
+**What you need to start**: the selected work and the links to the evidence
+(`discovery.md`, `analysis.md`, `validation.md`, `priorities.md`). If evidence is absent,
+say which parts have no proof. Do not write a confident sentence with no data.
 
-## Fork by bet size
+**What you make**: `prd.md` in the initiative folder.
 
-- **Enhancement** → 1-pager: problem, who/when/evidence, why now, goal metric, non-goals.
-- **Cycle-sized bet** → Shape Up pitch shape: problem, appetite, fat-marker solution, rabbit holes, no-gos.
-- **New-product bet** → PR/FAQ: one-page future-dated press release + FAQ limited to risk, dependency, and hardest-questions content (market-sizing, pricing, and P&L questions are out of scope for this skill).
+- For a feature or a change, use `templates/prd.md`.
+- For a new product, use `templates/pr-faq.md`.
 
-## Gating order (each gate must pass before writing the next section)
+Open the template only when you write the document. The document ends with
+`**Status**: DRAFT | APPROVED`.
 
-1. **Problem first** — problem statement in the user's terms, with who has it, when it bites, and evidence links. Zero solution language; "we need an AI chatbot" gets reversed via JTBD/Five-Whys into the job to be done before it's accepted.
-2. **Metrics falsifiable** — exactly ONE primary metric with baseline, target, and measurement window; guardrails as non-degradation bounds ("{metric} will not degrade more than {amount}"). Reject "improve engagement"-shaped goals.
-3. **Appetite, not estimate** — a time budget the solution is designed within (Shape Up), set with the user.
-4. **Solution direction at fat-marker altitude** — key flows and principles concrete enough to evaluate, abstract enough to leave design room. No screens, no field lists.
-5. **Non-goals** — minimum 3, each naming a plausible thing deliberately NOT being built; plus scope tiers (must-ship / cut-first) tied to the appetite so cuts are pre-decided.
-6. **Rabbit holes** — risky details called out and pre-solved or explicitly patched.
+**Condition to go forward**: the checks in "Order of work" pass. Then your own review
+passes. Then `metrics.md` exists and the user approves it (stage P6). Then the user
+approves the PRD. Then write Status APPROVED. Then give the PRD to `/workflow` as the
+input to stage 1.
 
-## Self-review (PR/FAQ mechanics, adapted)
+The PRD gives the problem and the target result. The PRD does not design the product.
+Screens, fields, and flows belong to `/plan-product-spec`. The architecture belongs to
+`/plan-technical-spec`.
 
-Before presenting, critique the draft fresh, truth-seeking not selling: Is the customer and their problem unmistakable in one read? Is the problem real (evidence) or asserted? What's the hardest question a skeptic would ask — is it answered? Where does this fail? Fix, then present to the user for approval.
+**Words**: see `../product-workflow/GLOSSARY.md`.
+**How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
-## Final Check
+## How much to write
 
-- Problem section has zero solution language and live evidence links; unvalidated assumptions declared (route big ones to /product-validation first).
-- One primary metric + guardrails, all falsifiable; appetite set; non-goals ≥ 3; scope tiers present.
-- `metrics.md` exists and its primary metric matches this PRD's Success Metric (baseline/target/window identical) before Status is set APPROVED.
-- Size cap respected: 1–2 pages (enhancement/pitch), ~6 pages ceiling (PR/FAQ).
-- On approval: Status APPROVED, decision + why appended to `memory.md`, handoff offered to /workflow.
+| Size of the work | Template | How much to write |
+| --- | --- | --- |
+| Small change | `prd.md` | Parts 1 to 5, and Part 7. 1 to 2 pages. |
+| One cycle of work | `prd.md` | All parts. 2 to 4 pages. |
+| New product | `pr-faq.md` | Announcement and questions. 6 pages maximum. |
+
+## Order of work
+
+Each check must pass before you write the next part.
+
+1. **Write the problem first.** Use the words of the user. Say which users have the
+   problem, when it occurs, and what it costs them. Add links to the evidence. Do not
+   write about a solution in this part. If the user says "we need an AI chatbot", ask
+   "why" a few times. Find the result that the user wants. Write that result. Then
+   continue.
+
+2. **Fill the introduction and the 5W1H table.** Write 2 to 5 sentences first. Then
+   answer the questions in the table. Keep only the rows that you can answer. Delete the
+   other rows. Do not write "not specified". Add a source for each answer.
+
+3. **Make the numbers exact.** Write exactly one main number. Give it a start value, a
+   target, and a time limit. Then write what must not become worse. Use a limit:
+   "{number} will not become worse than {amount}". Do not accept a goal such as "more
+   engagement". A person must be able to show the number is false.
+
+4. **Set a time budget, not an estimate.** This is the time that the team accepts to
+   spend. The team designs the solution to fit the time. Agree the time with the user.
+
+5. **Write the user stories.** Put them in groups. Use the form: as a {user type}, I want
+   {function}, so that {result}. Mark each story P1 (must have) or P2 (good to have).
+
+6. **Write the requirements and the acceptance criteria.** One row for each requirement.
+   - If a source PRD exists, copy the requirement words exactly. Do not change them.
+   - Write the acceptance criteria from the source only. Do not invent them. If the source
+     says nothing, write "the source does not say".
+   - Add a link to the design, or write "—".
+
+7. **Write the detail for each function that needs it.** Copy Part 8 of the template one
+   time for each function. Write the user story, the problem, the solution, the behavior,
+   and the quality that the user can feel. Keep the solution at a rough level. Do not
+   write screens or field lists.
+
+8. **Write what is not in scope.** Write 3 lines or more. Each line is something the team
+   can build but decides not to build. Then write the two groups: must ship, and remove
+   first. The groups must fit the time budget. Then the team knows what to remove before
+   the work starts.
+
+9. **Write the risky details.** Find each small detail that can take many weeks. Make the
+   decision now, or write that you accept the risk.
+
+10. **Write the assumptions and the open questions.** An assumption is safe to accept. An
+    open question changes the behavior of the product and needs the user.
+
+## Review the draft yourself
+
+Do this before you show the draft to the user. Read it as a new reader. Look for the
+truth. Do not sell the idea. Answer these questions:
+
+- Can a new reader name the user and the problem after one read?
+- Is the problem real, with evidence? Or is it only a statement?
+- What is the hardest question from a person who does not agree? Is the answer in the
+  document?
+- Where can this feature fail?
+
+Repair the document. Then show it to the user for approval.
+
+## Checks before you finish
+
+- The problem part has no solution words. The links to the evidence work. You wrote which
+  assumptions have no proof. Send the large ones to `/product-validation` first.
+- The introduction has 2 to 5 sentences. The 5W1H table has only rows that you can answer.
+  Each answer has a source.
+- There is one main number, and a list of things that must not become worse. A person can
+  show each number is false.
+- `metrics.md` exists. Its main number is the same as the number in the PRD. The start
+  value, the target, and the time limit are the same. Do this before Status APPROVED.
+- The user stories have priorities. Each requirement has acceptance criteria or the words
+  "the source does not say".
+- There are 3 or more lines that are not in scope. The must-ship and remove-first groups
+  exist.
+- The document is not longer than the limit in the table above.
+- After approval: write Status APPROVED. Write the decision and the reason in `memory.md`.
+  Then offer to start `/workflow`.

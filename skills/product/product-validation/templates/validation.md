@@ -1,36 +1,36 @@
-# {Initiative} - Validation
+# {Initiative} - Assumptions and Tests
 
-**Candidate solution(s)**: {from discovery.md — target opportunity + solutions}
+**Solutions we test**: {from discovery.md — the selected problem and the possible solutions}
 
-## Assumption Map
+## What we accept as true with no proof
 
-| # | Assumption (falsifiable) | Category | Importance | Evidence today | Riskiest? |
+| # | Assumption (a person can show it is false) | Type | Damage if false | Proof today | Test first? |
 | --- | --- | --- | --- | --- | --- |
-| A1 | {…} | desirable/usable/feasible/viable/ethical | high/med/low | none/weak/strong | yes/no |
+| A1 | {…} | want it / can operate it / can build it / works for the company / can hurt a person | high / medium / low | none / weak / strong | yes / no |
 
-## Experiments
+## Tests
 
-<!-- One card per experiment; one assumption per experiment. Thresholds declared BEFORE running. -->
+<!-- One block for each test. One assumption in one test. Write the number before you run the test. -->
 
-### E1 — {experiment name} (tests A{#})
+### T1 — {test name} (tests A{#})
 
-- **Method**: fake door / prototype test / concierge / spike
-- **Decision rule (pre-declared)**: {threshold, n or duration} → pass: {action} · fail: {action}
-- **Ran**: {what, where, when, n}
-- **Result**: {measured outcome vs threshold}
-- **Verdict**: VALIDATED / REFUTED / INCONCLUSIVE — {one line}
+- **Method**: fake door / click model / manual service / engineering study
+- **Decision rule, written before the test**: {the number to pass, how many users or days} → pass: {action} · fail: {action}
+- **What we ran**: {what, where, when, how many users}
+- **Result**: {the number we measured, next to the number to pass}
+- **Result type**: TRUE / FALSE / NOT CLEAR — {one line}
 
-## Accepted Risks
+## Risks we accept with no test
 
-| Assumption | Why untested | Accepted by |
+| Assumption | Why we do not test it | Accepted by |
 | --- | --- | --- |
 | {…} | {…} | {user, date} |
 
-## Routing
+## What comes next
 
-- Refuted → {discovery tree change}
-- Validated → {feeds prioritization/PRD evidence}
+- If false → {the change on the problem map}
+- If true → {goes to the selection of what to build and to the PRD}
 
 ---
 
-**Status**: CURRENT — last updated {date} · experiments: {n}
+**Status**: CURRENT — last update {date} · tests to date: {n}

@@ -1,37 +1,98 @@
 ---
 name: product-prioritization
-description: Choose product bets transparently — opportunity scoring for the problem space, evidence-cited RICE/ICE for solutions, Kano when satisfaction shape matters, Now-Next-Later roadmap. Stage P4 of /product-workflow. Use when the user asks to prioritize a backlog or opportunities, build a roadmap, score bets, or invokes /product-prioritization.
+description: Select what to build next and show the reasons — score the problems by how much users need help, score the solutions with a simple formula, give a source for each number, and make a roadmap with no false dates. Stage P4 of /product-workflow. Simple English, no product experience needed. Use when the user asks to put a backlog in order, make a roadmap, score ideas, or invokes /product-prioritization.
 ---
 
 # Product Prioritization
 
-**Stage**: P4 of the product loop (/product-workflow). Prev: /product-discovery, /product-validation · Next: /product-prd.
-**Input**: opportunities (problem space) or candidate bets (solution space) plus their evidence from `discovery.md` / `analysis.md` / `validation.md`.
-**Output**: `priorities.md` in the initiative folder — structure: `templates/priorities.md` (read only when writing). Update in place; the roadmap survives priority changes because it has no dates.
-**Gate**: user approves the top bet(s); the reasoning is recorded, not just the ranking.
+**Stage**: P4 of `/product-workflow`. It comes after `/product-discovery` and
+`/product-validation`. It gives data to `/product-prd`.
 
-Strategy principles applied: Focus (few impactful bets), Powered by Insights (evidence-cited inputs), Transparency (reasoning visible), Placing Bets (portfolio of quarterly bets).
+**What you need to start**: a list of user problems, or a list of possible things to
+build. You also need the evidence from `discovery.md`, `analysis.md`, and
+`validation.md`.
 
-## Process
+**What you make**: `priorities.md` in the initiative folder. The layout is in
+`templates/priorities.md`. Open the template only when you write the document. Update the
+same file. The roadmap stays correct after a change of plan because it has no dates.
 
-1. **Fix the altitude** — problem space or solution space; never mix in one table.
-   - **Problem space** → opportunity scoring (Outcome-Driven style): rate importance and current satisfaction per opportunity; `opportunity = importance + max(importance − satisfaction, 0)`. Underserved = important + unsatisfied. Never rank opportunities by effort.
-   - **Solution space** → RICE (`Reach × Impact × Confidence / Effort`) or ICE for triage.
-2. **Evidence-cite every cell** — each Reach/Impact/Confidence value names its source (discovery snapshot, analysis theme, validation verdict, telemetry). A guessed cell caps Confidence at 50%. No source, no score.
-3. **Optional lenses, gated by cost**:
-   - **Kano** (functional/dysfunctional question pairs → basic / performance / delighter) — solution space only; it shapes satisfaction expectations, it does not pick what to build. Use when over/under-investing in delight is the live question.
-   - **Cost of Delay / CD3** — when timing matters materially; the economically honest tiebreaker for sequence.
-4. **Roadmap as Now-Next-Later** — columns are confidence horizons, not dates; entries are outcomes/opportunities, not feature promises. Now = validated + committed; Next = validated direction, solution open; Later = opportunity acknowledged.
-5. **Record the bet** — the chosen bet(s), what was deliberately not chosen and why, and the review trigger. Append the decision + why to `memory.md`.
+**Condition to go forward**: the user approves the selection. You write the reasons in
+the document, not only the order.
 
-## Guards
+This skill uses four habits: select few things, use evidence, show the reasons, and
+accept that each selection can fail.
 
-- The score is a sorting hypothesis, never the decision — the decision is made by a human reading the evidence, and recorded with its why.
-- Anti-RICE-theater: no conviction-laundering (uncited cells), no effort-dominance (sanity-check that low-effort trivia isn't outranking validated opportunities).
-- Kano never applies to needs/opportunities — that's Ulwick's critique; use opportunity scoring there.
+**Words**: see `../product-workflow/GLOSSARY.md`.
+**How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
-## Final Check
+## Steps
 
-- Altitude explicit; every score cell cited; capped confidence where guessed.
-- Now-Next-Later present with outcomes, not dated features.
-- Chosen bet approved by the user with reasoning recorded; rejected alternatives noted.
+1. **Select which list you put in order**: user problems, or things to build. Do not mix
+   the two lists in one table. You cannot compare them.
+
+   **To put user problems in order**: for each problem, give two scores from 1 to 10. The
+   first score is how important the problem is for the user. The second score is how
+   satisfied the user is with the options today. Then use this formula:
+
+   ```
+   score = importance + (importance − satisfaction, or 0 if the result is negative)
+   ```
+
+   A high score means two things: the user cares, and no option helps. There is space
+   for you. **Do not put problems in order by difficulty.** If you do, you remove the
+   largest opportunities because they look expensive before you design a solution.
+
+   **To put things to build in order**: use RICE.
+   `score = Reach × Impact × Confidence ÷ Effort`.
+   - **Reach**: how many users this touches in one quarter.
+   - **Impact**: how much it changes the result for each user. Use a number from 0.25
+     to 3.
+   - **Confidence**: how sure you are, as a percent.
+   - **Effort**: person-weeks or person-months.
+
+   For a fast first pass, remove Reach. Use `Impact × Confidence ÷ Effort`. The name of
+   this formula is ICE.
+
+2. **Give a source for each number.** A source is an interview, a research group, a test
+   result, or usage data. If you guess a number, Confidence cannot be more than 50%. No
+   source, no score. This one rule keeps the scores honest.
+
+3. **Two extra methods are optional. Use them only if they give value:**
+   - **Find which features users expect and which features make users happy.** This is
+     the Kano survey. Ask how the user feels if the feature exists. Then ask how the user
+     feels if the feature does not exist. The difference puts each feature in a group:
+     expected, more is better, or makes users happy. Use this method for solutions only.
+     It sets what users expect. It does not select the winner. Use it when the team
+     argues about how much to spend on delight.
+   - **Find what a delay costs.** Use this method to select between two items with the
+     same score, when one item has a time limit.
+
+4. **Make the roadmap with three columns: Now, Next, and Later.** The columns show how
+   sure the team is. They do not show a month. Each item is an outcome or a problem. Do
+   not promise a feature.
+   - **Now**: the team tested it and made a commitment.
+   - **Next**: the direction is clear. The solution is open.
+   - **Later**: the team knows the problem. The team does not work on it now.
+
+5. **Record the selection**: what you selected, what you did not select and why, and
+   which event starts a new review. Write the decision and the reasons in `memory.md`.
+
+## Cautions
+
+- **The score puts items in order. The score does not make the decision.** A person
+  reads the evidence and makes the decision. Write the reasons. A table is not
+  responsible for a decision.
+- **Scores become false in two ways.** First, numbers with no source. They make a guess
+  look like analysis. Second, effort controls the result. Then many small easy items get
+  a higher rank than the one problem that you proved. Look for both before you show the
+  document.
+- The Kano survey is for solutions only. Do not use it for problems. Use the problem
+  formula for problems.
+
+## Checks before you finish
+
+- The document says which list you put in order. Each number has a source. Each number
+  that you guessed has 50% confidence or less.
+- The Now, Next, and Later table exists. It has outcomes, not features with dates.
+- The user approved the selection. The reasons are in the document. The document names
+  the options that you did not select and what can change your decision.

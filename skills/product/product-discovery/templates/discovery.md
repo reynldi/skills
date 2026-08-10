@@ -1,44 +1,46 @@
 # {Initiative} - Discovery
 
-**Outcome**: {product outcome metric this discovery serves}
-**Target customer**: {who, and the current theory about them}
+**Goal**: {the change in user behavior that this work serves}
+**Users we think have the problem**: {which users, and what we believe about them now}
 
-## Experience Map
+## Steps of the user today
 
-{Customer's current end-to-end experience; mark unknowns.}
+{Write what the user does today, step by step. Put a ? on each step that you do not know.}
 
-## Interview Snapshots
+## Interview notes
 
-<!-- One per interview; append newest first. -->
+<!-- One block for each interview. Put the newest block first. Do not write names or personal data. -->
 
-### {Date} — {who (role/segment, no PII)}
+### {Date} — {role or type of user}
 
-- **Quote**: "{memorable verbatim}"
-- **Story**: {the specific past story walked, timeline form}
-- **Opportunities heard**: {needs/pains/desires, in their words}
-- **Forces** (if a switch story): push {…} · pull {…} · anxiety {…} · habit {…}
-- **Insights**: {…}
+- **Quote to remember**: "{the exact words of the user}"
+- **The story**: {the exact event in the past, in time order}
+- **Problems heard**: {needs, pains, and wants, in the words of the user}
+- **If the user changed tools**: pushed away by {…} · pulled in by {…} · afraid of {…} · kept in place by {…}
+- **What we learned**: {…}
 
-## Opportunity Solution Tree
+## Problem map
+
+<!-- Problems at the top. Possible solutions below each problem. Each problem names its interviews. -->
 
 ```text
-Outcome: {outcome}
-├── Opportunity: {need/pain — evidence: snapshots #, #}
-│   ├── Solution A: {…}
-│   ├── Solution B: {…}
-│   └── Assumption tests → validation.md
-└── Opportunity: {…}
+Goal: {goal}
+├── Problem: {need or pain — from interviews #, #}
+│   ├── Possible solution A: {…}
+│   ├── Possible solution B: {…}
+│   └── Assumptions to test → validation.md
+└── Problem: {…}
 ```
 
-**Target opportunity**: {which and why — impact on outcome + evidence strength}
-**Target approved by user**: pending <!-- pending | approved ({date}) -->
+**Problem we solve first**: {which one, and why. Give the effect on the goal and the strength of the evidence.}
+**User approval**: pending <!-- pending | approved ({date}) -->
 
-## Competing Solutions (target opportunity)
+## Different solutions for the selected problem
 
-| Solution | How it addresses the opportunity | Riskiest assumptions |
+| Solution | How it solves the problem | Largest assumptions |
 | --- | --- | --- |
 | {A} | {…} | {→ validation.md} |
 
 ---
 
-**Status**: CURRENT — last updated {date} · interviews: {n}
+**Status**: CURRENT — last update {date} · interviews to date: {n}

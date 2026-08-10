@@ -39,18 +39,26 @@ Any stage can run inline (Skill tool, default) or be delegated to another model 
 
 **When to delegate**: cross-model review/QA (a different model family than the implementer catches what self-review misses), heavy or parallel implementation (one delegate per `[P]` story, each in its own git worktree), second opinions on verification, or when the user names a model. Planning and coordination default to inline.
 
+**Sizing rule** — the handoff cost is fixed (brief + delegate re-discovery + verification); the work's cost scales with the task. Small (≤ ~3 files, no new architecture) or subtle (concurrency, tricky invariants) → implement inline in the coordinator's session even on a frontier model: delegation would cost more in re-discovery than the whole task, and subtle intent is what handoffs lose. Large or mechanical (bulk edits, boilerplate, parallel `[P]` stories) → delegate down to the cheaper implementer with the approved plan/tasks as the brief. Coordinator context past ~60% is a delegation trigger regardless of size. Cross-provider fresh eyes justify delegating review, never implementation.
+
 **Protocol** — for every delegation:
 
 1. **Brief**: write `{feature}/handoff/{NNN}-{stage}-{provider}.md` from `templates/handoff.md`. Self-contained (mission with scope directives, process pointer to the stage SKILL.md, read-first list, decisions, tried-and-failed, constraints, definition of done, report-back format). Pointers, not pasted content.
-2. **Run**: `bin/agent.sh <provider>[/<model>] <handoff-file> [workdir]`. Output streams back; the full log lands beside the brief. Guarded defaults; `AGENT_YOLO=1` only inside an isolated worktree.
+2. **Run**: prefer the orchestrator's runner when installed — `workflow/orchestrator/bin/handoff.sh --brief <handoff-file> --provider <provider>[/<model>] --role <stage-role> [--effort <level>] [--dir <workdir>]` — it wraps `agent.sh` (identical behavior, `AGENT_RESUME`/`AGENT_YOLO` pass through) and adds a delegation summary (agent, role, provider/model, effort, session ID, status) plus `<brief>.summary.json`. Fall back to `bin/agent.sh <provider>[/<model>] <handoff-file> [workdir]` when the orchestrator isn't present. Output streams back; the full log lands beside the brief. Guarded defaults; `AGENT_YOLO=1` only inside an isolated worktree.
 3. **Verify** — never trust the report: the artifact exists with its Status set, the stage gate criteria hold, spot-check the diff. Reject → append the findings to the brief and re-run, or take over inline. A delegated stage passes its gate the same way an inline one does.
-4. **Record**: one line in memory.md's delegation log (handoff, provider, outcome).
+4. **Record**: one line in memory.md's delegation log (handoff, provider, outcome); when handoff.sh ran, copy the essentials from `<brief>.summary.json` (provider/model, session ID, duration, status).
 
 Every brief must carry an objective, an output format, the tools/commands to use, and explicit task boundaries — vague delegation produces overlap and gaps.
 
 When several delegates share one tree, the coordinator serializes tree-wide gates — code generation and the full-suite verification run happen once, after all delegates are idle, never per-delegate in parallel.
 
 **Agent reuse & rotation** — applies to in-session subagents and CLI delegates alike. Iterating on the same stage or artifact (revisions, gate rejections, follow-ups) continues the SAME agent: message the existing subagent by name (name stage agents, e.g. `stage1-product-spec`, so they stay addressable) or re-run the delegate with `AGENT_RESUME=1` (claude `-c`, codex `exec resume --last`, opencode `-c`, pi `-c`). Spawn a fresh agent only when: (a) the current agent's context is ~75% used, (b) the work moves to a different stage or scope, or (c) fresh eyes are the point (cross-model review, adversarial verification). When rotating at the 75% mark, have the outgoing agent append its state to memory.md first, then brief the successor from disk.
+
+**Escalation via /orchestrator** (when installed) — the pipeline's answer for non-convergence:
+
+- A gate cycle (implement ↔ review, or repeated verification FAIL) that hasn't converged after ~3 rounds → invoke the `orchestrator` skill's **committee** pattern with the full history (briefs, findings, what was tried); implement its merged plan, then resume the pipeline at the failed gate.
+- Before an expensive or contested gate decision, a **advisor** second opinion (different model family) is cheap insurance.
+- Grindy retry-until-verified work — driving the regression suite green during implement, babysitting CI after review fixes — fits the orchestrator's **loop** (`workflow/orchestrator/bin/loop.sh`, or `paseo loop run` when paseo is up) instead of the coordinator iterating by hand.
 
 ## Configuration: `.spectrum.json`
 

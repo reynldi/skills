@@ -1,40 +1,91 @@
 ---
 name: product-validation
-description: Test the riskiest assumptions behind a candidate solution before building — assumption mapping plus cheap experiments (fake doors, prototype tests, concierge). Stage P3 of /product-workflow. Use when the user wants to validate an idea, design experiments, test demand, or invokes /product-validation.
+description: Test the risks in an idea before the team builds it — write what you accept as true with no proof, find the assumption that can stop the idea, and run the cheapest test that can show it is false. Stage P3 of /product-workflow. Simple English, no product experience needed. Use when the user wants to test an idea, design an experiment, measure demand, or invokes /product-validation.
 ---
 
 # Product Validation
 
-**Stage**: P3 of the product loop (/product-workflow). Prev: /product-discovery (target opportunity + competing solutions) · Feeds: /product-prioritization and /product-prd.
-**Input**: candidate solution(s) with their assumptions — from `discovery.md`, or a PRD's open assumptions. Missing → ask or suggest /product-discovery.
-**Output**: `validation.md` in the initiative folder — structure: `templates/validation.md` (read only when writing). Update in place as experiments run.
-**Gate**: every riskiest assumption is tested with a pre-declared threshold, or explicitly accepted as a risk by the user.
+**Stage**: P3 of `/product-workflow`. It comes after `/product-discovery`. That stage
+gives you the selected problem and 2 or 3 different solutions. This stage gives data to
+`/product-prioritization` and to the PRD.
 
-Validation minimizes waste: assess the big risks early with the smallest test that can kill the idea.
+**What you need to start**: one or more possible solutions and the assumptions about
+them. Take them from `discovery.md`, or from the open questions in a PRD. If you have
+neither, ask the user. You can also propose `/product-discovery` first.
 
-## Process
+**What you make**: `validation.md` in the initiative folder. The layout is in
+`templates/validation.md`. Open the template only when you write the document. Update
+the same file when each test ends.
 
-1. **Decompose into assumptions** — for each candidate solution, write falsifiable assumptions across: desirable (do they want it), usable (can they figure it out), feasible (can we build it — route to engineers/spike, don't guess), viable (does it work for the product), ethical (could it harm).
-2. **Map importance × evidence** (Assumptions Mapping): plot each assumption on a 2×2. The important-and-unevidenced quadrant is the riskiest — test those first, regardless of how easy other tests would be.
-3. **Design the smallest test** — one assumption per test, never a full-concept "validation":
-   - **Fake/painted door** — a real entry point to a nonexistent capability; measure click-through against a threshold; honest follow-up screen required.
-   - **Prototype test** — clickable mock, ~5 sessions, task-based; tests comprehension/usability, not enthusiasm.
-   - **Concierge / Wizard-of-Oz** — deliver the value manually to test desirability before automation.
-   - **Feasibility spike** — time-boxed engineering question, handed to the dev pipeline.
-4. **Pre-declare the decision rule** — success threshold, sample/duration, and what you'll do on pass/fail — BEFORE running. Moving thresholds after results is the cardinal sin.
-5. **Run and record** — evidence per experiment: what ran, n, result vs threshold, verdict (validated / refuted / inconclusive).
-6. **Route the verdicts** — refuted → back to the discovery tree (next solution or reframe); validated → into /product-prioritization and the PRD's evidence links; inconclusive → redesign or accept explicitly.
+**Condition to go forward**: you test each dangerous assumption against a number that
+you wrote before the test. If you do not test it, the user must say that the team
+accepts the risk.
 
-## Guards
+The purpose: spend a few days to find something that can cost you a few months.
 
-- Commitment (time, money, reputation, data) is evidence; opinions and compliments are not.
-- Test the lethal assumption, not the convenient one.
-- Fake doors must resolve honestly (waitlist/explanation) and run briefly.
-- Feasibility assumptions go to engineers — product does not self-certify feasibility.
+**Words**: see `../product-workflow/GLOSSARY.md`.
+**How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
-## Final Check
+## Steps
 
-- Assumption map present; riskiest quadrant identified and addressed first.
-- Every experiment has a pre-declared threshold and a recorded verdict.
-- Untested important assumptions are explicitly accepted by the user, not silently carried.
-- Verdicts appended to `memory.md` (tried-and-failed included — they prevent re-litigating).
+1. **Write what you accept as true with no proof.** Do this for each possible solution.
+   Write each assumption so that a person can show it is false. Use five types:
+   - **Do the users want it?** This type stops most ideas.
+   - **Can the users operate it?**
+   - **Can we build it?** Give this type to the engineers, or run a short study. Do not
+     answer it from your own feeling.
+   - **Does it work for the company?** For example, support load, operations, law, and
+     maintenance.
+   - **Can it hurt a person?** For example, privacy, fairness, and misuse.
+
+2. **Put the assumptions in order.** Draw a simple 2 × 2 table. One axis: how much
+   damage occurs if the assumption is false. The other axis: how much proof you have
+   now. The box with much damage and no proof is first. Start there, also if the tests in
+   the easy box are faster.
+
+3. **Design the smallest test that can stop the idea.** Test one assumption in one test.
+   Do not run one large test of the full idea. If a large test fails, you do not know
+   which part failed.
+   - **Fake door**: a real button for a function that does not exist. Count the clicks.
+     Compare the count to your number. The users who click must see an honest page. For
+     example, "this function comes soon. Do you want an email?". Run this test for a
+     short time only.
+   - **Click model**: a model with links, about 5 sessions. Give each user a task. Watch
+     where the user stops. This test shows if users understand it. It does not show if
+     users want it.
+   - **Manual service**: give the value by hand to a few users before you build
+     software. This test shows if the value is real.
+   - **Engineering study**: one question, one time limit. Give it to the build pipeline.
+
+4. **Write the decision rule before you run the test.** Write which number is a pass.
+   Write how many users or how many days. Write what you do if the test passes and what
+   you do if the test fails. Do not change the number after you see the result. This
+   error makes the test useless.
+
+5. **Run the test and record it**: what you ran, how many users, the result against the
+   number, and the result type. Use **true**, **false**, or **not clear**.
+
+6. **Use the results.** If an assumption is false, go back to the problem map. Use the
+   next solution, or write the problem again. If an assumption is true, put it in the
+   selection of what to build and in the evidence links of the PRD. If the result is not
+   clear, design the test again, or ask the user to accept the risk.
+
+## Cautions
+
+- **What is proof**: users who give something real. For example, time, money,
+  reputation, or their data. **What is not proof**: opinions, compliments, and
+  "I will use it for sure".
+- **Test the assumption that can stop the idea.** Do not test the easy assumption.
+- A fake door must be honest and short. You use the trust of the user.
+- The question "can we build it?" goes to the engineers. Product does not approve this
+  question.
+
+## Checks before you finish
+
+- The 2 × 2 table is in the document. You started with the box with much damage and no
+  proof.
+- Each test has a number from before the test and a result after the test.
+- The user accepts each important assumption that you did not test. Write the name and
+  the date. Do not continue in silence.
+- The results go in `memory.md`. Put the failures in the file also. The failures stop the
+  team from a new discussion about the same idea in six months.

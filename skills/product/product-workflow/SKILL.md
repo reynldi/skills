@@ -1,39 +1,84 @@
 ---
 name: product-workflow
-description: Orchestrate the product loop — Discovery → Analysis (on demand) → Validation → Prioritization → PRD → Metrics → handoff to /workflow (build) → Measure → back to Discovery — with approval gates, shared memory, and .spectrum.json-configured multi-model delegation. Use when the user wants to run product work end-to-end, from problem to shipped-and-measured bet, or invokes /product-workflow.
+description: Run product work from start to end in simple English — find the real problem, test that users want it, select what to build, write the PRD, set the success numbers, give the PRD to the build pipeline, then measure the result. For all persons, not only product managers. Use when the user wants to take an idea to a shipped and measured result, or invokes /product-workflow.
 ---
 
 # Product Workflow
 
-Product-side coordinator — the counterpart of /workflow (development). It runs a **loop**, not a line: continuous discovery feeds bets; shipped bets feed measurement; measurement feeds discovery. Grounded in the Product Operating Model: teams receive problems and desired outcomes, not feature lists; outcomes over output. Product stages de-risk *valuable* and *viable*; the dev pipeline de-risks *usable* and *feasible*.
+This skill runs the product work for a feature. It controls the six other product
+skills. There are two halves to the job:
 
-## Stages
+- This loop answers one question: is this worth the work, and for which users?
+- `/workflow`, the build pipeline, answers a different question: can we build it,
+  and does it work?
 
-| #  | Stage          | Skill                  | Artifact      | Gate                                            |
-| -- | -------------- | ---------------------- | ------------- | ----------------------------------------------- |
-| P0 | Discover setup | (below)                | memory.md     | —                                               |
-| P1 | Discovery      | product-discovery      | discovery.md  | target opportunity chosen with user             |
-| P2 | Analysis       | product-analysis       | analysis.md   | on demand — decision-ready implications         |
-| P3 | Validation     | product-validation     | validation.md | riskiest assumptions tested or accepted         |
-| P4 | Prioritization | product-prioritization | priorities.md | user approves the bet                           |
-| P5 | PRD            | product-prd            | prd.md        | gating order + self-review + user approval      |
-| P6 | Metrics        | product-metrics        | metrics.md    | falsifiable + approved (before PRD approval)    |
-| →  | Build          | **/workflow** (stages 1–8) | its artifacts | its gates — prd.md is stage-1 input         |
-| P7 | Measure        | product-metrics (update) | metrics.md  | actuals recorded + user signs off on learnings → back to P1 |
+This is a loop and not a line. The team measures what it ships. The team uses what
+it learns in the next round.
 
-All artifacts share one initiative folder (same folder the dev pipeline uses for the feature) and one `memory.md`.
+**Who can use this**: all persons. You do not need product experience. Each stage
+gives the steps in simple English. Read `GLOSSARY.md` if a special word stops you.
 
-## Stage P0: Setup
+**How to write**: write all documents in Simplified Technical English. The rules are
+in `STE.md`. Keep instruction sentences to 20 words or less. Use the active voice.
 
-Once per initiative: read the project's product context (README, existing specs, prior discovery/analysis artifacts); read `.spectrum.json` at the project root (semantics: the workflow skill's Configuration section — installed as the sibling folder `workflow/`; in this repo, `skills/development/workflow/`). **Create the initiative folder now**: `{artifacts.specsRoot|specs}/{initiative-kebab-name}/`, create `memory.md` in it from the workflow skill's `templates/memory.md` (if it exists, append — never recreate) and record the folder path in it; the dev pipeline's stage 1 MUST reuse this folder (its own folder rule applies only to standalone runs). Note installed providers (workflow `bin/agent.sh list`). Summarize to the user, then start.
+## The seven stages
+
+| #  | Stage | Skill | Document | Condition to go forward |
+| -- | ----- | ----- | -------- | ----------------------- |
+| P0 | Make the folder | (see below) | memory.md | — |
+| P1 | Learn the problem | product-discovery | discovery.md | you and the user agree which problem to solve |
+| P2 | Research (only if needed) | product-analysis | analysis.md | the research answers one clear question |
+| P3 | Test the risks | product-validation | validation.md | you test each large assumption, or the user accepts the risk |
+| P4 | Select what to build | product-prioritization | priorities.md | the user approves the selection |
+| P5 | Write the PRD | product-prd | prd.md | the checks pass and the user approves |
+| P6 | Set the numbers | product-metrics | metrics.md | the numbers are exact and the user approves them before PRD approval |
+| →  | Build it | `/workflow` (stages 1–8) | its own documents | its own gates. prd.md is the input |
+| P7 | Measure the result | product-metrics (update) | metrics.md | you record the real numbers and the user approves the lessons, then go back to P1 |
+
+All documents go in one folder for the initiative. One `memory.md` goes in the same
+folder. The build pipeline uses the same folder.
+
+## Stage P0: make the folder
+
+Do these steps one time for each initiative:
+
+1. Read what exists now: the README, old specs, and earlier discovery or research notes.
+2. Read `.spectrum.json` in the project root, if the file exists. It sets which model
+   does which role. The meaning of each field is in the Configuration part of the
+   `workflow` skill. That skill is the folder next to this one. In this repository it
+   is `skills/development/workflow/`.
+3. Make the folder `{artifacts.specsRoot|specs}/{initiative-kebab-name}/`.
+4. Make `memory.md` in that folder from `workflow/templates/memory.md`. Write the
+   folder path in it. If `memory.md` exists, add to it. Do not make it again.
+   Stage 1 of the build pipeline must use this same folder.
+5. Find which model providers are on the machine. Run `workflow/bin/agent.sh list`.
+6. Tell the user what you found in a few lines. Then start.
 
 ## Rules
 
-- Entry at any stage — a user with an existing PRD starts at P5; one with a validated bet at P4. **Resume**: read the artifacts' Status lines and `memory.md`; living artifacts (CURRENT) re-enter where the loop left off; confirm the resume point with the user.
-- User-approval gates are hard stops (P1 target, P4 bet, P5 PRD, P7 sign-on-learnings). On approval, record it in the artifact.
-- P2 is on demand — run it when a decision lacks external evidence, never as a ritual. **P5/P6 choreography**: run P6 after P5's gate 1 (problem) and before P5's gate 2 — the PRD's Success Metric section transcribes metrics.md's primary metric, so the PRD is falsifiable before it advances.
-- **Handoff to build**: only an APPROVED prd.md crosses to /workflow; it becomes /plan-product-spec's input. Product artifacts stay authoritative for *why*; dev artifacts for *what/how*.
-- **Loop-backs**: refuted validation → discovery tree; missed metrics → discovery as learning; scope changes during build → /workflow's scope-control routes product-level changes back here (P5 or earlier), never patched downstream.
-- **Delegation & reuse**: same machinery as /workflow — handoff briefs from `workflow/templates/handoff.md`, run via `workflow/bin/agent.sh`, roles/models/effort resolved from `.spectrum.json`, agent reuse per the workflow skill's Agent reuse & rotation rule and the config's `reuse` policy.
-- Boundary: no pricing, TAM, GTM, or unit-economics work — out of scope by design.
-- Keep the user oriented: one status line per stage transition (`{stage}: {status} → {next}`).
+- **Start at any stage.** If the user has a PRD, start at P5. If the user knows what to
+  build and why, start at P4. If the user has only an idea, start at P1.
+- **To continue old work**: read the Status line at the end of each document. Read
+  `memory.md`. Find where the work stopped. Ask the user to confirm the restart point
+  before you write anything.
+- **Four stages need a "yes" from the user**: the problem to solve (P1), what to build
+  (P4), the PRD (P5), and the lessons after launch (P7). Write the approval and the date
+  in the document.
+- **Stage P2 is optional.** Run it when a real decision needs evidence from outside.
+  Do not run it as a habit.
+- **Stage P5 and stage P6 mix.** Write the problem part of the PRD first. Then set the
+  success numbers in P6. Then finish the PRD. The PRD copies a number that the user
+  already approved.
+- **Only an approved PRD goes to the build pipeline.** It becomes the input to
+  `/plan-product-spec`. Product documents stay correct for the reason. Build documents
+  are correct for the content and the method.
+- **If something fails, go back. Do not go sideways.** A failed test sends you to the
+  problem map. A number that misses its target becomes a lesson, not a fault. A scope
+  change in the build comes back to P5 or earlier. Do not repair it in the build stage.
+- **To give work to another model**: use the same method as `/workflow`. Write the brief
+  from `workflow/templates/handoff.md`. Run it with `workflow/bin/agent.sh`. Take the
+  roles, the models, and the effort levels from `.spectrum.json`.
+- **Out of scope**: price, market size, sales plans, and unit economics. This loop is
+  about what to build and why.
+- **Keep the user informed**: write one line for each stage change —
+  `{stage}: {result} → {next step}`.

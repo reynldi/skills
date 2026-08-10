@@ -1,48 +1,48 @@
-# {Initiative} - Metrics
+# {Initiative} - Numbers
 
-## North Star (product level)
+## Main number (for the product)
 
-- **North Star**: {metric capturing delivered customer value} — {why moving it means the customer is better off}
-- **Input metrics** (weekly-movable):
-  1. {metric} — {believed causal link to the North Star}
-  2. {…} (3–5 total)
+- **Main number**: {the number that shows the value users get} — {why an increase means the user is better than before}
+- **Smaller numbers** (a team can move each one in one week):
+  1. {number} — {why we believe it moves the main number}
+  2. {…} (3 to 5 in total)
 
-## Feature Metrics ({bet name})
+## Numbers for this feature ({name of the work})
 
-<!-- Only the HEART rows that serve this bet. -->
+<!-- Keep only the lines that serve this feature. -->
 
-| Dimension | Goal | Signal | Metric (baseline → target, window) |
+| Line | Goal | User action that shows it | Number (start → target, time limit) |
 | --- | --- | --- | --- |
-| {Adoption / Task success / …} | {…} | {…} | {…} |
+| {New users / Task success / …} | {…} | {…} | {…} |
 
-**Primary (from PRD)**: {metric} — baseline {…} → target {…} within {window}
+**Main number from the PRD**: {number} — start {…} → target {…} in {time limit}
 
-## Leading / Lagging Pairs
+## Fast and slow numbers
 
-| Leading (moves in days) | Lagging (confirms) | Believed causal link |
+| Fast number (moves in days) | Slow number (confirms) | Why we believe they connect |
 | --- | --- | --- |
-| {…} | {…} | {falsifiable statement} |
+| {…} | {…} | {a statement a person can show is false} |
 
-## Guardrails
+## Must not become worse
 
-- {metric} will not degrade by more than {amount}
-- {support volume / latency / churn / trust bound}
+- {number} will not become worse than {amount}
+- {support tickets / page speed / cancellations / trust}
 
-**Definition approved by user**: pending <!-- pending | approved ({date}) — required before PRD approval -->
+**User approval of these numbers**: pending <!-- pending | approved ({date}) — needed before PRD approval -->
 
-## Instrumentation Needs
+## What the team must record
 
-- Track {event/property} when {behavior} (requirement for the dev pipeline — what, not how)
+- Record {event or property} when {user action}. This is a requirement for the build pipeline. Write what, not how.
 
-## Post-Launch Actuals
+## Real numbers after launch
 
-| Metric | Target | Actual @ window close | Verdict |
+| Number | Target | Real number at the end date | Result |
 | --- | --- | --- | --- |
-| {…} | {…} | {…} | HIT / MISS / INCONCLUSIVE |
+| {…} | {…} | {…} | HIT / MISS / NOT CLEAR |
 
-**Learning routed to discovery**: {what the misses taught → discovery.md}
-**Learnings sign-off**: pending <!-- pending | signed-off ({date}) -->
+**Lessons for discovery**: {what the misses taught us → discovery.md}
+**User approval of the lessons**: pending <!-- pending | approved ({date}) -->
 
 ---
 
-**Status**: CURRENT — last updated {date}
+**Status**: CURRENT — last update {date}

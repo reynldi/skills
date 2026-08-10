@@ -1,32 +1,37 @@
-# {Initiative} - Priorities
+# {Initiative} - What we build next
 
-**Altitude**: problem space / solution space
-**Serves outcome**: {product outcome}
+**This table puts these in order**: user problems / things to build (select one, never both)
+**Goal it serves**: {the change in user behavior}
 
 ## Scores
 
-<!-- Problem space: opportunity scoring. Solution space: RICE/ICE. Every cell cites its evidence; guessed cells cap Confidence at 50%. -->
+<!--
+For problems: importance (1–10), satisfaction with the options today (1–10),
+score = importance + max(importance − satisfaction, 0).
+For things to build: Reach × Impact × Confidence ÷ Effort.
+Each cell names its source. A cell that you guess has 50% confidence or less.
+-->
 
 | Item | {Importance / Reach} | {Satisfaction / Impact} | Confidence (source) | {Effort} | Score |
 | --- | --- | --- | --- | --- | --- |
-| {…} | {value — source} | {value — source} | {≤50% if guessed — source} | {…} | {…} |
+| {…} | {value — source} | {value — source} | {≤50% if you guess — source} | {…} | {…} |
 
-{Optional: Kano read (solution space only) or Cost-of-Delay note, with why the lens earned its cost.}
+{Optional: the Kano result for solutions, or a note about the cost of a delay. Write why this extra method gave value.}
 
-## Roadmap (Now-Next-Later)
+## Roadmap (no dates)
 
-| Now (validated + committed) | Next (direction validated) | Later (opportunity acknowledged) |
+| Now (tested and committed) | Next (direction is clear) | Later (problem known, work not started) |
 | --- | --- | --- |
-| {outcome/bet} | {…} | {…} |
+| {outcome or problem} | {…} | {…} |
 
-## The Bet
+## The decision
 
-- **Chosen**: {bet} — **Why**: {evidence-grounded reasoning}
-- **Not chosen**: {alternative} — {why not, and what would change the call}
-- **Review trigger**: {when this ranking gets revisited}
+- **Selected**: {what} — **Why**: {the reasons, with links to the evidence}
+- **Not selected**: {the other option} — {why not, and what can change our decision}
+- **Review when**: {the event}
 
 **User approval**: pending <!-- pending | approved ({date}) -->
 
 ---
 
-**Status**: CURRENT — last updated {date}
+**Status**: CURRENT — last update {date}

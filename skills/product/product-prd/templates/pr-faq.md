@@ -1,46 +1,70 @@
-# {Product/Bet Name} - PR/FAQ
+---
+title: <Product or Project Name>
+product: "[[<Product Name>]]"
+feature: <Sub-area or Module>
+status: draft                   # draft | in-review | approved | shipped | deprecated
+tags: []
+related:
+source_url:
+source_type:
+last_synced:
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+---
 
-**Evidence**: discovery {link} · analysis {link} · validation {link}
+# <Product or Project Name> - PR/FAQ
 
-## Press Release ({future launch date} — one page max)
+**Evidence**: discovery {link} · research {link} · tests {link}
 
-**{Heading: product name + customer benefit}**
+<!--
+Use this template for a new product only. For a feature, use prd.md.
+Write the announcement first. Then answer the hard questions.
+Write in simple English. Keep the announcement to one page.
+-->
 
-_{One-sentence subheading: who it's for and what they get.}_
+## Announcement ({future launch date} — one page maximum)
 
-{Summary paragraph: what launched and why it matters.}
+**{Title: the product name and the value for the user}**
 
-{Problem paragraph: the customer problem, in their terms.}
+_{One sentence: which users it is for and what they get.}_
 
-{Solution paragraph: how it solves it — outcomes, not implementation.}
+{First paragraph: what the company launched and why it is important.}
 
-> "{Internal quote — why we built this}" — {role}
+{Second paragraph: the problem of the user, in the words of the user.}
 
-> "{Customer quote — the experience after adopting}" — {customer persona}
+{Third paragraph: how the product solves the problem. Write results, not technology.}
 
-{Getting started: how a customer begins.}
+> "{Quote from the company: why we built this}" — {role}
 
-## FAQ (risk, dependency, and hardest questions only — max ~5 pages)
+> "{Quote from a user: the experience after the user starts}" — {type of user}
 
-<!-- Market-sizing, pricing, and P&L questions are out of scope. -->
+{Last paragraph: how a user starts.}
 
-**Q: {hardest skeptic question}**
-A: {truth-seeking answer, evidence-linked}
+## Questions and answers
 
-**Q: {key risk / failure mode}**
+<!--
+Answer only three types of question: risks, dependencies, and the hardest questions.
+Do not answer questions about market size, price, or profit. They are out of scope.
+Use 5 pages maximum.
+-->
+
+**Q: {the hardest question}**
+A: {an honest answer, with links to the evidence}
+
+**Q: {the largest risk or failure}**
 A: {…}
 
-**Q: {dependency / sequencing question}**
+**Q: {a dependency or an order of work}**
 A: {…}
 
-## Success Metric
+## Success numbers
 
-- **Primary**: {metric} — baseline {…} → target {…} within {window}
-- **Guardrails**: {non-degradation bounds}
+- **Main number**: {number} — start {…} → target {…} in {time limit}
+- **Must not become worse**: {number} will not become worse than {amount}
 
-## Non-Goals
+## Not in scope
 
-- {…} (≥ 3)
+- {…} (3 or more)
 
 ---
 

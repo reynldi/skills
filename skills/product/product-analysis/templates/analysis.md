@@ -1,43 +1,43 @@
-# {Initiative} - Product Analysis
+# {Initiative} - Research
 
-**Decision this serves**: {the concrete product decision}
-**Collected**: {dates} · **Owner**: {who} · **Update trigger**: {competitor launch / lost-deal cluster / quarterly}
+**The decision this serves**: {the exact decision}
+**Data collected**: {dates} · **Owner**: {who} · **Update when**: {competitor launch / group of lost deals / each quarter}
 
-## Competitor Tiers
+## Competitors
 
-| Tier | Who | Why they matter to this decision |
+| Group | Who | Why they are important for this decision |
 | --- | --- | --- |
 | Direct | {…} | {…} |
 | Indirect | {…} | {…} |
-| Aspirational | {…} | {…} |
+| Examples to learn from | {…} | {…} |
 
-## Evidence
+## What we found
 
-<!-- One section per method used (2-3 max). Every claim: theme + count + verbatim + source + date. End every section with a So-what. -->
+<!-- One part for each method. Use 2 or 3 methods only. Each result: group name + count + exact quote + source + date. Each part ends with an action. -->
 
-### {Method: teardown / review mining / win-loss / signals}
+### {Method: use their product / read reviews / won and lost deals / what comes next}
 
-- **{Theme}** ({n} occurrences, {severity}) — "{verbatim}" — {source, date} {leading|lagging}
+- **{Group name}** ({n} times, pain: {high / medium / low}) — "{exact quote}" — {source, date} {early | confirmed}
 - …
 
-**So what → recommended product action**: {…}
+**Action**: {…}
 
-## Implications
+## Actions
 
-| Rank | Implication | Action | Metric it should move |
+| Rank | What we found | What we do | Number it must move |
 | --- | --- | --- | --- |
 | Do now | {…} | {…} | {…} |
-| Watch | {…} | {trigger to act} | {…} |
-| Deliberately ignore | {…} | {why} | — |
+| Watch | {…} | {the event that makes us act} | {…} |
+| Do not do | {…} | {why} | — |
 
-## Capability Read
+## Our position
 
-{table-stakes / differentiator / deliberately-not-doing — narrative, not a matrix.}
+{Write a few sentences, not a table: what all competitors have, why users select us, and what we decide not to build.}
 
 ## Appendix
 
-{Raw feature matrix, full review coding, teardown screenshots.}
+{Raw feature table, full review groups, and screenshots from their product.}
 
 ---
 
-**Status**: CURRENT — last updated {date}
+**Status**: CURRENT — last update {date}

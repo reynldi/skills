@@ -12,6 +12,38 @@ description: QA acceptance testing of an implemented feature against the Product
 
 QA validates the product against the Product Spec from the user's point of view — observable behavior, not code.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
+## QA depth
+
+Read `tasks.md` first. Its QA depth controls the work:
+
+- **Focused** — execute every changed acceptance criterion, focused automated checks,
+  and the affected-flow smoke test.
+- **Feature** — create a concise QA charter; execute happy paths, important edge and
+  failure states, plus relevant contract checks.
+- **Full** — consume the /qa-planning test plan and reusable cases; execute the
+  risk-based regression suite, then record any scenarios that remain manual.
+
+No depth skips acceptance proof. A Full plan is an input to QA, not a substitute for
+executing and recording real evidence.
+
+## Executable browser QA
+
+When a scenario needs browser proof, first discover the project's existing runner.
+Use it when present. Otherwise, use Playwright only after the user permits dependency
+installation. Do not use browser execution for API-only or CLI behavior.
+
+Run `bash bin/run-browser-qa.sh` with the app start command, readiness URL, browser test
+command, and artifact directory. The runner starts only a local test app, waits for
+readiness, runs one suite, and stops the app. Configure the browser runner to retain
+screenshots, traces, console output, and failed network details on failure.
+
+Use test accounts and isolated data. Never target production or perform destructive
+actions. Record the executor, expected result, actual result, artifact location, and
+remaining manual checks in `qa-report.md`.
+
 ## Process
 
 1. **Build the QA charter** from the specs: per story — happy path, each specified edge case, and failure paths (invalid input, permission denied, duplicates/retries where specified); cross-story interactions; regression of adjacent existing behavior the feature touches.

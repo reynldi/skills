@@ -1,15 +1,10 @@
 {
-  "suite": "Authentication Regression Suite",
-  "description": "Curated cases run to guard against regressions. Cadence per priority: P0 always, P1 weekly+, P2 at releases. Live status lives in test-data.js; this file only selects case ids.",
-  "source": "test-data.js",
+  "suite": "{Feature} Regression",
+  "source": "features/",
   "cases": [
-    { "id": "TC-001", "flow": "FLOW-SIGNIN", "priority": "P0", "cadence": "always" },
-    { "id": "TC-002", "flow": "FLOW-SIGNIN", "priority": "P1", "cadence": "weekly" }
+    { "id": "TC-001", "flow": "signin", "priority": "P0", "cadence": "always", "reason": "critical path" }
   ],
   "excluded": [
-    {
-      "id": "TC-004",
-      "reason": "Email-format validation is covered by unit tests; not cost-effective as a manual regression case"
-    }
+    { "id": "TC-002", "reason": "covered elsewhere or low recurrence risk" }
   ]
 }

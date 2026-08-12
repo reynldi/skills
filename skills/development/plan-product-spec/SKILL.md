@@ -12,6 +12,9 @@ description: Write a UX-centric Product Spec (feature/UX spec) from a feature id
 
 **Feature folder**: always one folder per feature, holding all pipeline artifacts. Place and name it per the project's spec convention (look for `specs/`, `docs/`, prior `*-spec.md` files and mirror the parent directory and naming style); if none exists, create `specs/{feature-kebab-name}/`. Treat an existing folder as this feature's only when the user confirms; update an existing Product Spec in place.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Process
 
 1. **Understand intent** — what is the user trying to achieve, what blocks them, what experience should the feature provide.

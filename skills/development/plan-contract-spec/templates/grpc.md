@@ -2,6 +2,11 @@
 
 # {RPC Name}
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {contract or implementation change}
+
 ## `{ServiceName}.{MethodName}`
 
 - **Contract**: New / Modified / Existing

@@ -12,6 +12,9 @@ description: Holistic post-implementation review of the whole feature diff again
 
 This is a whole-feature review across the full diff — integration seams, cumulative drift, spec coverage as a whole — not a repeat of the per-task reviews done during implementation.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Process
 
 1. **Scope** — collect the full diff (`baseline..HEAD` from the report); group changed files by area.

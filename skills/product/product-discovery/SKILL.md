@@ -30,6 +30,9 @@ feature list, the team builds it well and no user needs it.
 **Words**: see `../product-workflow/GLOSSARY.md`.
 **How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
+**Context budget**: apply the "Context and artifact budget" rules in
+../product-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Steps
 
 1. **Select one goal.** Write one change in user behavior for this round. Write which
@@ -59,7 +62,9 @@ feature list, the team builds it well and no user needs it.
      kept the user in place. These four questions show the result that the user wants
      from the product.
    - Write **one page for each interview**: the quote to remember, the problems you
-     heard, what you learned, and each new detail about the steps of the user.
+     heard, what you learned, each new detail about the steps of the user, and the
+     interview date, user segment, and consent to retain the quote. Remove unnecessary
+     personal details.
 
 4. **Read the notes after each 3 or 4 interviews.** Add the problems to the map. Add
    needs, pains, and wants. These rules control what goes on the map:
@@ -94,6 +99,8 @@ feature list, the team builds it well and no user needs it.
   money, or reputation.
 - **One interview is not a pattern.** Wait for 3 or more users with the same problem.
 - **Do not sell your idea in an interview.** If you must show something, show it last.
+- **Record contradictions.** A story that disagrees with the selected problem is evidence,
+  not an inconvenience to omit.
 
 ## Checks before you finish
 

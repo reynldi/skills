@@ -12,6 +12,9 @@ description: Skeptical pre-implementation review of Product/Technical/Contract S
 
 Be skeptical. Challenge the plan, do not defend it. Never approve a plan because it is detailed.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Severity (pipeline-wide ladder)
 
 - **Blocking** — must resolve before implementation

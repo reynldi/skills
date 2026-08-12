@@ -1,5 +1,10 @@
 # {Feature Name} - Review Report
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {implementation or test evidence change}
+
 **Status**: PASS <!-- PASS | FAIL -->
 **Diff range**: {baseline}..{head}
 Open findings: Blocking {n} · High {n} · Medium {n} · Low {n}

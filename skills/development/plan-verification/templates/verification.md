@@ -1,5 +1,10 @@
 # {Feature Name} - Plan Verification
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {any verified input changes}
+
 ## Verdict
 
 {2-4 sentence critical assessment}

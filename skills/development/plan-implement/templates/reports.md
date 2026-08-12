@@ -37,6 +37,11 @@ Next: T{###}
 
 # {Feature Name} - Implementation Report
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {implementation, review, or QA change}
+
 **Status**: PASS <!-- PASS | FAIL -->
 **Diff range**: {baseline ref}..{HEAD}
 **Commands**: build `{cmd}` · test `{cmd}` · run `{cmd}`

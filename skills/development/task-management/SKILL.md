@@ -12,6 +12,9 @@ Two modes. Pick by the argument the user passes.
 
 ## Principles
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 - List small, atomic tasks.
 - Order work from trivial and lowest-risk to most complex.
 - Use checkboxes and stable task ids (`T001`, `T002`, ...).

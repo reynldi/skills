@@ -8,26 +8,64 @@ Portable agent skills for Product Engineer. Works with Claude Code, Codex, Gemin
 curl -fsSL https://raw.githubusercontent.com/reynldi/skills/main/install.sh | bash
 ```
 
-Or from a clone: `./setup.sh`. Either way it asks where to install (global or per-project, `.claude` or `.agents`) and offers to init `.spectrum.json` — a step-by-step wizard for provider / model / effort per role (planner, implementer, reviewer, qa, …), one role at a time, continue or finish after each.
+Or from a clone: `./setup.sh`. Either way it asks where to install (global or per-project, `.claude` or `.agents`).
 
-## What's inside
+## Skill List
+
+Every skill runs standalone via its slash command. The two workflow skills coordinate the others in sequence.
+
+### Product (`skills/product/`)
+
+| Skill | How to use | What it is |
+| ----- | ---------- | ---------- |
+| `/product-workflow` | "take this idea to a shipped, measured result" | Coordinates P1→P7 below. Is this worth building, and for whom? Simple English, for everyone. |
+| `/product-discovery` | "learn about the users", "plan interviews" | Find which problem is worth the work — talk to real users, map problems to solutions. |
+| `/product-analysis` | "research competitors", "market research" | Answer one exact question from competitor products, reviews, and win/loss evidence. Optional stage. |
+| `/product-validation` | "test this idea", "design an experiment" | Find the assumption that can kill the idea and run the cheapest test that can prove it false. |
+| `/product-prioritization` | "order the backlog", "make a roadmap" | Score problems and solutions with sources for each number; roadmap with no false dates. |
+| `/product-prd` | "write a PRD for X" | Short PRD that starts with the problem — 5W1H, success numbers, stories, acceptance criteria. |
+| `/product-metrics` | "set success metrics for X" | Define success in falsifiable numbers before building; record real numbers after launch. |
+
+### Development (`skills/development/`)
+
+| Skill | How to use | What it is |
+| ----- | ---------- | ---------- |
+| `/development-workflow` | "build this feature end-to-end" | Coordinates the pipeline below with approval gates, resume, and per-feature memory. |
+| `/plan-product-spec` | "write the product spec" | Stage 1 — user-facing behavior, flows, states, edge cases. |
+| `/plan-technical-spec` | "write the technical spec" | Stage 2 — architecture, models, migrations, reliability. |
+| `/plan-contract-spec` | "spec the API/events" | Stage 3 — REST/gRPC/event contracts; one-paragraph file when there are none. |
+| `/plan-verification` | "verify the specs" | Stage 4 — cross-spec consistency review; PASS gate before tasks. |
+| `/plan-ready` | "generate implementation tasks" | Stage 5 — final gate; emits `tasks.md` and records the QA-depth choice. |
+| `/plan-implement` | "implement the tasks" | Stage 6 — task-by-task build with checkpoints and regression runs. |
+| `/impl-review` | "review the implementation" | Stage 7 — independent review against specs; PASS gate. |
+| `/qa-test` | "QA this feature" | Stage 8 — acceptance proof against the Product Spec; writes `qa-report.md`. |
+| `/qa-planning` | "create a test plan / regression suite" | Full-QA planning: test plan, Gherkin cases, regression suite, optional dashboard. |
+| `/spec-analyze` | "is this spec sound?" | Judge an existing product or technical spec against competitors, first principles, and the codebase. |
+| `/spec-generate` | "spec this existing feature" | Trace a shipped feature through the code and write its spec retroactively. |
+| `/task-management` | "break this plan into tickets" | Atomic, dependency-ordered tickets (tracer-bullet slices), or review tasks against specs. |
+
+### General (`skills/general/`)
+
+| Skill | How to use | What it is |
+| ----- | ---------- | ---------- |
+| `/simplified-english` | "simplify this text" | Write documents in Simplified Technical English (ASD-STE100). Default output style for the product skills. |
+| `/eli5` | "ELI5 this" | Explain any topic, decision, code, or process for a complete beginner. |
+
+An APPROVED `prd.md` connects product to delivery: `/product-workflow` ends where `/plan-product-spec` begins, in the same feature folder.
+
+## Orchestration (optional)
+
+Everything above runs inline in one session with no extra setup. Orchestration adds multi-model delegation on top — skip this section if you don't need it.
 
 | Piece | Command | What it answers |
 | ----- | ------- | --------------- |
-| Product loop | `/product-workflow` | Is this worth building, and for whom? Discovery → validation → prioritization → PRD → metrics. Simple English, for everyone. |
-| Delivery pipeline | `/development-workflow` | Can we build it, and does it work? Specs → verification → tasks → implement → review → QA, with approval gates and per-feature memory. |
-| Orchestrator | `/orchestrator` | Who should do this work? Delegates via four patterns: **advisor** (second opinion), **committee** (two contrasting agents plan), **handoff** (ephemeral blocking transfer), **loop** (worker/verifier until done). |
+| Orchestrator | `/orchestrator` | Who should do this work? Four patterns: **advisor** (second opinion), **committee** (two contrasting agents plan), **handoff** (ephemeral blocking transfer), **loop** (worker/verifier until done). |
 
-Each stage is its own skill and also runs standalone:
+The orchestrator uses [Paseo](https://paseo.sh) when its daemon is running, native subagents otherwise. Every delegation is ephemeral and reports a summary: agent, role, provider/model, effort, session ID. Helpers: `workflow/orchestrator/bin/{backend,handoff,loop}.sh`.
 
-- **Product** (`skills/product/`): `/product-workflow` coordinates `/product-discovery` → `/product-analysis` → `/product-validation` → `/product-prioritization` → `/product-prd` → `/product-metrics`
-- **Development** (`skills/development/`): `/development-workflow` coordinates `/plan-product-spec` → `/plan-technical-spec` → `/plan-contract-spec` → `/plan-verification` → `/plan-ready` → `/plan-implement` → `/impl-review` → `/qa-test`
+**Configuration** — `setup.sh` offers to init `.spectrum.json`, a step-by-step wizard for provider / model / effort per role (planner, implementer, reviewer, qa, …), one role at a time. Field meanings live in the development-workflow skill's "Configuration: `.spectrum.json`" section; example at `skills/development/development-workflow/templates/spectrum.json`.
 
-An APPROVED `prd.md` connects product to delivery. The orchestrator uses [Paseo](https://paseo.sh) when its daemon is running, native subagents otherwise. Every delegation is ephemeral and reports a summary: agent, role, provider/model, effort, session ID. Helpers: `workflow/orchestrator/bin/{backend,handoff,loop}.sh`.
-
-## The principle
-
-**One owning context, independent verification, escalate on evidence.** Judgment (plan, verify, arbitrate) stays in one frontier-model context; execution is delegated down to cheaper models only when size makes it pay; "done" is declared by a check the author didn't produce; role separation is bought reactively, never as ceremony.
+**The principle** — one owning context, independent verification, escalate on evidence. Judgment (plan, verify, arbitrate) stays in one frontier-model context; execution is delegated down to cheaper models only when size makes it pay; "done" is declared by a check the author didn't produce; role separation is bought reactively, never as ceremony.
 
 ```mermaid
 flowchart TD

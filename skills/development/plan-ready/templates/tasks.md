@@ -1,5 +1,10 @@
 # {Feature Name} - Implementation Tasks
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {scope, dependency, or verification change}
+
 ## Readiness
 
 **Status**: PASS <!-- PASS | FAIL — on FAIL, list issues below and generate no tasks -->
@@ -12,6 +17,7 @@
 
 **User approval**: pending <!-- pending | approved — /plan-implement requires approved -->
 **Baseline**: — <!-- {sha} — set by /plan-implement at preflight -->
+**QA depth**: Focused <!-- Focused | Feature | Full — Full requires /qa-planning before /qa-test -->
 
 ## Phase 1: Setup (shared infrastructure — skip when unnecessary)
 

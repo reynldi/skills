@@ -55,7 +55,9 @@ the fix." Refactor → "refactor, not rewrite." Carry the user's exact intent.
 1. **Launch blocking.**
    - Native backend: `bin/handoff.sh --brief <file> --provider <p>[/<model>]
      --role <role> [--effort <level>] [--dir <workdir>]`. The call blocks; stdout is
-     the delegate's report.
+     the delegate's report. When `--role` names a persona (compass, forge, prism,
+     gauntlet, bastion, atlas), its file is embedded into the brief automatically;
+     `--effort L1..L4` pins the persona's thinking level.
    - Paseo backend: `create_agent` with `notifyOnFinish: true`, then wait for the
      finish notification — do not poll, do not start other work on this task.
 2. **Read the report.** Challenge it against the acceptance criteria before accepting.

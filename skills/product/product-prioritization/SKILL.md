@@ -25,6 +25,9 @@ accept that each selection can fail.
 **Words**: see `../product-workflow/GLOSSARY.md`.
 **How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
+**Context budget**: apply the "Context and artifact budget" rules in
+../product-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Steps
 
 1. **Select which list you put in order**: user problems, or things to build. Do not mix
@@ -55,7 +58,8 @@ accept that each selection can fail.
 
 2. **Give a source for each number.** A source is an interview, a research group, a test
    result, or usage data. If you guess a number, Confidence cannot be more than 50%. No
-   source, no score. This one rule keeps the scores honest.
+   source, no score. Record the source date, user segment, confidence, and limitation
+   beside each score. This one rule keeps the scores honest.
 
 3. **Two extra methods are optional. Use them only if they give value:**
    - **Find which features users expect and which features make users happy.** This is

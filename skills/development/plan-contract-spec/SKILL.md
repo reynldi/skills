@@ -10,6 +10,9 @@ description: Create or update contract-spec.md (REST/gRPC/Event contracts) from 
 **Output**: `contract-spec.md` in the same folder, ending with the standard footer `**Status**: DRAFT | APPROVED`. Templates — read only the type(s) the feature actually uses: `templates/rest.md`, `templates/grpc.md`, `templates/event.md`.
 **Gate**: Final Check passes; user approves — then set the Status footer to APPROVED. If the feature introduces no new/changed external interfaces, write a one-paragraph `contract-spec.md` saying so (same footer) and present it for approval.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Process
 
 1. **Read the Technical Spec** — identify every new or modified contract from its APIs List. Do not invent behavior beyond the Product/Technical Specs.

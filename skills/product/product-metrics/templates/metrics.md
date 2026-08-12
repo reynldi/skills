@@ -1,5 +1,10 @@
 # {Initiative} - Numbers
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {measurement date / outcome change}
+
 ## Main number (for the product)
 
 - **Main number**: {the number that shows the value users get} — {why an increase means the user is better than before}

@@ -2,6 +2,11 @@
 
 # {Endpoint Name}
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {contract or implementation change}
+
 ## {Method} {Path}
 
 - **Contract**: New / Modified / Existing

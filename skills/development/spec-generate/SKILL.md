@@ -6,6 +6,9 @@ disable-model-invocation: true
 
 Generate product or technical spec by tracing it through the code. This is extraction, not evaluation: document what exists. No critique, no best-practice commentary, no "should", no severity labels. One exception: internal contradictions (two places in the codebase or its docs disagreeing with each other) are facts and are recorded as such. Judging code against external best practice is not. Where code and docs disagree, code wins.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Inputs
 
 - The feature to document (e.g. "authentication process", "project flow").

@@ -1,5 +1,10 @@
 # {Initiative} - Research
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {competitor launch / new evidence / date}
+
 **The decision this serves**: {the exact decision}
 **Data collected**: {dates} · **Owner**: {who} · **Update when**: {competitor launch / group of lost deals / each quarter}
 

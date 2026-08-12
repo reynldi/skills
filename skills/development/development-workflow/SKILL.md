@@ -23,6 +23,22 @@ End-to-end feature delivery coordinator. Each stage is its own skill and also ru
 
 All artifacts live in one feature folder — stage 1 resolves it per /plan-product-spec's feature-folder rule.
 
+## QA depth
+
+Every change receives QA acceptance against its criteria. /plan-ready owns the QA-depth
+decision (Focused, Feature, or Full — criteria live in its "Choose QA depth" section)
+and records it in `tasks.md`. /qa-test reads and executes the recorded choice; when the
+choice is Full, /qa-planning runs first and hands its test plan and reusable cases to
+/qa-test.
+
+## Artifact lifecycle
+
+Every delivery artifact records: Lifecycle (ACTIVE, SUPERSEDED, or ARCHIVED), Owner,
+Next consumer, and Review trigger. Keep its existing approval, PASS/FAIL, and sign-off
+fields. Mark an artifact SUPERSEDED when a newer approved decision replaces it; do not
+erase history. Review ACTIVE artifacts after a scope, contract, architecture, or test
+evidence change. Archive only when the feature has closed and no future consumer remains.
+
 ## Stage 0: Discover the project
 
 Once per feature, before stage 1: read README / CLAUDE.md / AGENTS.md / contributing docs; identify the stack and build/test/run commands; find the spec/docs folder convention; list available project skills, reviewer agents, and installed providers (`bin/agent.sh list`); note the commit policy. Write the findings into `{feature}/memory.md` (template: `templates/memory.md`; if it already exists — e.g. created by /product-workflow — append under a new heading, never recreate). If the folder contains an APPROVED `prd.md`, note it: it is stage 1's primary input. Summarize findings to the user in a few lines, then start.
@@ -33,46 +49,102 @@ Once per feature, before stage 1: read README / CLAUDE.md / AGENTS.md / contribu
 - Artifacts carry state between stages; memory.md carries state *across agents and sessions*. Never rely on chat history for anything a later stage or another model will need.
 - Context hygiene: point to files, don't paste them; burn exploration tokens in subagents/delegates and keep only distilled summaries (~1-2k tokens) in the coordinator; when this session's context grows stale or heavy, the feature folder + memory.md is the re-entry point — resume works from disk alone.
 
-## Multi-model delegation
+## Risk and token budget
 
-Any stage can run inline (Skill tool, default) or be delegated to another model via `bin/agent.sh`. Delegates are fresh processes that know only the repo and the brief — never assume shared context.
+Classify the work before deep reading. The tier controls context depth and artifact
+detail. It never bypasses an applicable approval, verification, review, or QA gate.
 
-**When to delegate**: cross-model review/QA (a different model family than the implementer catches what self-review misses), heavy or parallel implementation (one delegate per `[P]` story, each in its own git worktree), second opinions on verification, or when the user names a model. Planning and coordination default to inline.
+| Tier | Use when | Read and write |
+| --- | --- | --- |
+| Quick | Reversible, small, no public contract, data, money, permission, or reliability boundary | A context card; only the affected spec/task and tests; a concise decision record if a later stage needs it. |
+| Standard | Normal feature work | The current stage inputs plus directly linked decisions; normal stage artifacts. |
+| High-risk | Data migration, money, permissions, public contract, production reliability, security, or hard-to-reverse user impact | The relevant approved specs, contracts, risk owner input, rollout/rollback conditions, and explicit verification evidence. |
 
-**Sizing rule** — the handoff cost is fixed (brief + delegate re-discovery + verification); the work's cost scales with the task. Small (≤ ~3 files, no new architecture) or subtle (concurrency, tricky invariants) → implement inline in the coordinator's session even on a frontier model: delegation would cost more in re-discovery than the whole task, and subtle intent is what handoffs lose. Large or mechanical (bulk edits, boilerplate, parallel `[P]` stories) → delegate down to the cheaper implementer with the approved plan/tasks as the brief. Coordinator context past ~60% is a delegation trigger regardless of size. Cross-provider fresh eyes justify delegating review, never implementation.
+Use this protocol in every tier:
 
-**Protocol** — for every delegation:
+1. Build a context card: goal, tier, current decision, approved decisions, open
+   questions, changed files, and next consumer.
+2. Read the minimum artifacts named by the tier. Follow links only when they change
+   the current decision. Summarize findings; never paste prior artifacts or code.
+3. Create an artifact only when it records a decision, evidence, risk, or proof that
+   a named later person, stage, or agent will consume. Otherwise update the context
+   card or do not write it.
+4. Keep ordinary output to decision, evidence, risks, and next owner. Expand only for
+   ambiguity, conflict, a tier trigger, or a user request.
+5. Raise the tier immediately when a listed High-risk boundary appears. State why,
+   then load only the newly relevant context.
 
-1. **Brief**: write `{feature}/handoff/{NNN}-{stage}-{provider}.md` from `templates/handoff.md`. Self-contained (mission with scope directives, process pointer to the stage SKILL.md, read-first list, decisions, tried-and-failed, constraints, definition of done, report-back format). Pointers, not pasted content.
-2. **Run**: prefer the orchestrator's runner when installed — `workflow/orchestrator/bin/handoff.sh --brief <handoff-file> --provider <provider>[/<model>] --role <stage-role> [--effort <level>] [--dir <workdir>]` — it wraps `agent.sh` (identical behavior, `AGENT_RESUME`/`AGENT_YOLO` pass through) and adds a delegation summary (agent, role, provider/model, effort, session ID, status) plus `<brief>.summary.json`. Fall back to `bin/agent.sh <provider>[/<model>] <handoff-file> [workdir]` when the orchestrator isn't present. Output streams back; the full log lands beside the brief. Guarded defaults; `AGENT_YOLO=1` only inside an isolated worktree.
-3. **Verify** — never trust the report: the artifact exists with its Status set, the stage gate criteria hold, spot-check the diff. Reject → append the findings to the brief and re-run, or take over inline. A delegated stage passes its gate the same way an inline one does.
-4. **Record**: one line in memory.md's delegation log (handoff, provider, outcome); when handoff.sh ran, copy the essentials from `<brief>.summary.json` (provider/model, session ID, duration, status).
+Quick-tier changes need no human approval when behavior is minor, reversible, and
+unambiguous. Ask only when the change affects visible behavior, creates a material
+trade-off, crosses a risk boundary, or the user requests confirmation. Explicit user
+instructions override this default.
 
-Every brief must carry an objective, an output format, the tools/commands to use, and explicit task boundaries — vague delegation produces overlap and gaps.
+Use this progress narration when helpful: “I have the goal, approved decisions, and
+open question. This is {tier}. I will read {minimum inputs}, produce {output}, and
+raise the tier if {trigger} appears.”
 
-When several delegates share one tree, the coordinator serializes tree-wide gates — code generation and the full-suite verification run happen once, after all delegates are idle, never per-delegate in parallel.
+## Transition rules
 
-**Agent reuse & rotation** — applies to in-session subagents and CLI delegates alike. Iterating on the same stage or artifact (revisions, gate rejections, follow-ups) continues the SAME agent: message the existing subagent by name (name stage agents, e.g. `stage1-product-spec`, so they stay addressable) or re-run the delegate with `AGENT_RESUME=1` (claude `-c`, codex `exec resume --last`, opencode `-c`, pi `-c`). Spawn a fresh agent only when: (a) the current agent's context is ~75% used, (b) the work moves to a different stage or scope, or (c) fresh eyes are the point (cross-model review, adversarial verification). When rotating at the 75% mark, have the outgoing agent append its state to memory.md first, then brief the successor from disk.
+1. **Enter** at the earliest decision that can change the requested outcome. Quick
+   work starts with a decision record and focused proof; Standard and High-risk work
+   start with their relevant product or delivery artifact.
+2. **Skip** an artifact only when its purpose does not apply: research with sufficient
+   evidence, contracts without external changes, or technical planning for a minor,
+   reversible change. Never skip proof for changed behavior.
+3. **Resume** from the first decision that is missing, stale, failed, or lacks required
+   approval. If implementation alone changed, resume at review or QA instead of
+   rewriting unaffected planning artifacts.
+4. **Escalate** immediately for data, money, permissions, public interfaces, security,
+   production reliability, or irreversible user impact. Record the trigger, then load
+   only newly relevant context.
+5. **Loop back** to the owner of the changed decision: product behavior → Product Spec;
+   architecture or reliability → Technical Spec; interface behavior → Contract Spec;
+   failed proof with unchanged intent → implementation, review, or QA.
 
-**Escalation via /orchestrator** (when installed) — the pipeline's answer for non-convergence:
+Explicit user instructions override these defaults. Applicable approval, verification,
+review, and QA gates remain mandatory.
 
-- A gate cycle (implement ↔ review, or repeated verification FAIL) that hasn't converged after ~3 rounds → invoke the `orchestrator` skill's **committee** pattern with the full history (briefs, findings, what was tried); implement its merged plan, then resume the pipeline at the failed gate.
-- Before an expensive or contested gate decision, a **advisor** second opinion (different model family) is cheap insurance.
-- Grindy retry-until-verified work — driving the regression suite green during implement, babysitting CI after review fixes — fits the orchestrator's **loop** (`workflow/orchestrator/bin/loop.sh`, or `paseo loop run` when paseo is up) instead of the coordinator iterating by hand.
+## Delegation
+
+For delegation, independent review, non-convergence, or bounded retry work, use
+`/orchestrator`. It owns pattern selection, briefing, isolation, verification, and
+backend rules. This workflow supplies the current stage, artifact brief, and next gate.
+Read `.spectrum.json` in Stage 0 when present; explicit user instructions win.
 
 ## Configuration: `.spectrum.json`
 
-Optional project-root config tuning this pipeline and the product pipeline (/product-workflow). Read it in Stage 0; missing file → the built-in defaults (everything inline, reuse at 75%). Example: `templates/spectrum.json`. The coordinator resolves it itself — no script parses it; unknown keys are ignored; explicit user instructions override the file.
+Optional project-root config for this pipeline and /product-workflow. Missing file →
+built-in defaults (everything inline, reuse, rotate at 75% context). Example:
+`templates/spectrum.json`. The coordinator resolves it itself — no script parses it;
+unknown keys are ignored; explicit user instructions override the file.
 
-- **Roles & stages** — `roles.{name}`: `provider` (claude|codex|gemini|opencode|pi), `model` (provider-native), `effort` (low|medium|high), `run` (inline|delegate), `fresh` (never reuse). `stages.{skill-name}` maps each stage to a role; resolution = stage → role → merged over `defaults`. `run: inline` → this session or a named subagent with that model/effort; `run: delegate` → `bin/agent.sh {provider}/{model} {handoff}`. Precedence: a non-claude provider always delegates via agent.sh, overriding `run: inline`; a stage missing from `stages` uses `defaults`. Effort maps best-effort per provider (claude natively, pi via `:level` suffix, others ignore).
-- **Reuse** — `reuse.policy` (reuse|always-new), `reuse.rotateAtContextPct` (default 75), `reuse.alwaysFresh` (roles that never reuse — keep reviewer/qa there). This parameterizes the Agent reuse & rotation rule above.
-- **Memory** — `memory.featureMemory` (filename in the feature folder, default `memory.md`), `memory.handoffDir` (default `handoff`), `memory.globalMemory` (optional path for durable cross-feature learnings — append non-feature-specific facts there too).
-- **Artifacts** — `artifacts.specsRoot` overrides the fallback feature-folder root (default `specs`).
-- **Delegation** — `delegation.yolo: true` → run agent.sh with `AGENT_YOLO=1` (isolated worktrees only).
+- **Roles & stages** — `roles.{name}`: `provider` (claude|codex|gemini|opencode|pi),
+  `model`, `effort` (low|medium|high), `run` (inline|delegate), `fresh` (never reuse).
+  `stages.{skill-name}` maps a stage to a role; resolution = stage → role → merged over
+  `defaults`. `run: inline` → this session or a named subagent; `run: delegate` →
+  `bin/agent.sh {provider}/{model} {handoff}`. A non-claude provider always delegates
+  via agent.sh, overriding `run: inline`; a stage missing from `stages` uses `defaults`.
+- **Personas** — `personas.{name}`: default thinking level (L1–L4) for that persona role.
+- **Reuse** — `reuse.policy` (reuse|always-new), `reuse.rotateAtContextPct` (default 75),
+  `reuse.alwaysFresh` (roles that never reuse — keep reviewer/qa there). On rotation,
+  the outgoing agent appends its state to memory.md first.
+- **Memory** — `memory.featureMemory` (default `memory.md`), `memory.handoffDir`
+  (default `handoff`), `memory.globalMemory` (optional cross-feature learnings path).
+- **Artifacts** — `artifacts.specsRoot` overrides the feature-folder root (default `specs`).
+- **Delegation** — `delegation.yolo: true` → run agent.sh with `AGENT_YOLO=1`, allowed
+  **only inside an isolated git worktree**, never in the user's live checkout.
+
+Delegated work follows the verify-and-record protocol: never trust the report — check
+the artifact exists with its Status set and the gate criteria hold, then log one line in
+memory.md's delegation log (handoff, provider, outcome).
 
 ## Rules
 
-- Run stages in order via the Skill tool. Never skip a gate. User-approval gates are hard stops — present the artifact summary and wait; do not proceed on your own. On approval, the stage records it in the artifact (Status APPROVED / User approval / Sign-off).
+- Run stages in order after entry. Use the Transition rules for entry, skip, resume,
+  escalation, and loop-back decisions. Never skip an applicable gate. User-approval
+  gates are hard stops — present the artifact summary and wait; do not proceed on your
+  own. On approval, the stage records it in the artifact (Status APPROVED / User
+  approval / Sign-off).
 - Pass Stage 0 findings (via memory.md) into each stage; the stages' own discovery steps exist for standalone runs and should only fill gaps, not repeat reads.
 - **Resume**: given an existing feature folder, read memory.md and each artifact's Status line; continue from the first missing / DRAFT / FAIL artifact — or the first whose approval line is still pending (`tasks.md` User approval, `qa-report.md` Sign-off). Confirm the resume point with the user before continuing.
 - **Loop-backs**: verification FAIL → fix the specs at the owning stage, re-run /plan-verification. Review or QA FAIL → fix via /plan-implement (its scope control decides what returns to planning), then re-run the failed stage. Artifacts update in place — paths stay stable.

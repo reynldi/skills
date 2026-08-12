@@ -8,6 +8,9 @@ Judge an existing spec. This is evaluation, not extraction — the opposite of `
 
 Nothing is written to disk until the final step, and only on the user's explicit instruction.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Step 0 — Scope the analysis
 
 Before anything else, ask the user what to analyze. Use an interactive prompt (clickable options) when available:

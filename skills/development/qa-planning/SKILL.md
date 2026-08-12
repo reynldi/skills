@@ -1,14 +1,22 @@
 ---
 name: qa-planning
-description: Generate QA test plans, manual test cases, regression test suites, and an HTML status dashboard. Test cases are produced per-flow in both Gherkin and JSON format. Use for "create a test plan for X", "write test cases for X", or "build a regression suite".
+description: Generate QA test plans, Gherkin test cases, regression suites, and an optional HTML dashboard. Use for "create a test plan for X", "write test cases for X", or "build a regression suite".
 disable-model-invocation: true
 ---
 
 # QA Planning
 
-Turn a feature or requirement into structured QA deliverables: a **test plan**, **manual test cases** (Gherkin + JSON), a **regression suite**, and an **HTML dashboard**. Pick the deliverable from what the user asks; a single request can span several (a plan usually implies cases).
+Turn a feature or requirement into a test plan, Gherkin cases, regression suite, or optional dashboard. Generate only requested, reusable outputs.
+
+This is Full QA planning. It is not the default for every change. Run it when
+/plan-ready recorded Full QA depth in `tasks.md` (the choice criteria live there),
+or when the user asks for it directly. Routine work uses /qa-test directly for
+acceptance proof.
 
 This is generation grounded in real context. Do not invent behavior — parse the requirement, and when context is thin, explore the code or quiz the user before writing. Every test step carries an expected result; every test case carries preconditions and test data.
+
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
 
 A feature is made of **flows**. Sign-in (sign in → verify OTP → done), onboarding, and invitations are separate flows, each its own Gherkin `.feature` file focused on one flow only. Discover the flows before writing any case.
 
@@ -16,6 +24,13 @@ A feature is made of **flows**. Sign-in (sign in → verify OTP → done), onboa
 
 - The feature or requirement to cover (e.g. "the user authentication feature").
 - Optional supporting material: a spec (markdown, pasted, or a Confluence URL fetched via the Atlassian MCP), a Jira/Linear ticket, or an existing test suite to extend.
+
+## QA assessment
+
+Before planning, confirm Full QA is justified against /plan-ready's "Choose QA depth"
+criteria (or re-apply them when running standalone). State the justification. If Full
+is not justified, recommend Focused or Feature QA through /qa-test and do not generate
+the large suite.
 
 ## Process
 
@@ -49,60 +64,28 @@ Uses `templates/TEST-PLAN.md`. Must define:
 
 ### Test cases
 
-Produce **both** formats for the same cases:
-
 - Gherkin — `templates/TEST-CASE.feature`, **one `.feature` file per discovered flow** (Given/When/Then, one behavior per scenario, `Scenario Outline` + `Examples` for variations). A `.feature` file covers a single flow end to end (e.g. `signin.feature`: sign in → verify OTP → done) — never mix flows in one file.
-- JSON data — `templates/test-data.js`. This is the **single source of truth / database** the dashboard reads. It holds the plan reference, every flow, and every case, as one `window.TEST_DATA = { ... }` assignment (the same JSON schema documented in `templates/TEST-CASE.json`, wrapped so it loads over `file://` by double-click). Each case carries a `status` field.
+- Dashboard data — `templates/test-data.js` only when the user requests the dashboard. It holds the plan reference, every flow, and every case as a `window.TEST_DATA = { ... }` assignment so it loads over `file://` by double-click.
 
-Every case: unique id, title, priority (P0/P1/P2), `status`, preconditions, test data, ordered steps each with an expected result, and a traceability link to the requirement. Valid `status` values: `not_run`, `pass`, `fail`, `blocked`, `skipped` (default `not_run` on generation).
+Every case: unique id, title, priority (P0/P1/P2), preconditions, test data, ordered steps each with an expected result, and a traceability link to the requirement.
 
-`templates/TEST-CASE.json` documents the plain-JSON schema; produce a `test-cases.json` export from it only if the user wants to import into a test-management tool. The dashboard itself uses `test-data.js`, so keep the status current there.
+When the dashboard is generated, each case in `test-data.js` also carries a `status`
+field (`not_run`, `pass`, `fail`, `blocked`, `skipped`; default `not_run`) — keep it
+current there. Without the dashboard, execution status lives in /qa-test's
+`qa-report.md`, not in the planning artifacts. Do not produce a standalone JSON
+test-case export.
 
 ### Regression suite
 
-A curated selection of existing cases plus new ones, grouped by flow and tagged by priority and run cadence. P0 cases run always; P1 weekly+; P2 at releases. Deliver as a JSON suite (array of case ids with tags) plus a short index. State explicitly what was excluded and why — never silently drop coverage.
+A curated selection of existing cases plus new ones, grouped by flow and tagged by priority and run cadence. P0 cases run always; P1 weekly+; P2 at releases. Deliver as a JSON suite per `templates/REGRESSION-SUITE.json` — each entry carries the case id, flow, priority, and cadence, sourced from the `.feature` files — plus a short index. State explicitly what was excluded and why — never silently drop coverage.
 
 ### HTML dashboard
 
 `dashboard.html` reads `test-data.js` (`window.TEST_DATA`) as its live database and opens by double-click — no server needed. It lists the plan and flows in a summary table with status rollups; clicking a flow reveals its test cases in a table with per-case status and steps. Do not author the HTML from scratch — copy `templates/DASHBOARD.html` into the output location unchanged. The dashboard never hardcodes cases; all data comes from `test-data.js`, so editing a case's `status` there and refreshing updates the dashboard.
 
-## Priority model
+## Quality bar
 
-| Priority | Description | Must run |
-| --- | --- | --- |
-| P0 | Business-critical, security, data integrity | Always |
-| P1 | Major features, common flows | Weekly+ |
-| P2 | Minor features, edge cases | Releases |
-
-## Pass / fail criteria
-
-- **PASS** — all P0 tests pass, 90%+ of P1 pass, no critical bugs open.
-- **FAIL (block release)** — any P0 fails, a critical bug, a security vulnerability, or a data-loss scenario.
-- **CONDITIONAL** — P1 failures with documented workarounds, known issues logged, and a fix plan in place.
-
-## Verification checklist
-
-Before delivering, confirm:
-
-**Test plan** — scope defined (in/out); entry/exit criteria specified; risks identified with mitigations.
-
-**Test cases** — every step has an expected result; preconditions documented; test data available.
-
-## Test-case writing
-
-**Do:** be specific and unambiguous; give an expected result for every step; test one thing per case; use consistent naming; keep cases maintainable.
-
-**Don't:** assume tester knowledge; write cases too long; skip preconditions; forget edge cases; leave expected results vague.
-
-## Anti-patterns
-
-| Avoid | Why | Instead |
-| --- | --- | --- |
-| Vague test steps | Can't reproduce | Specific actions + expected results |
-| Missing preconditions | Tests fail unexpectedly | Document all setup requirements |
-| No test data | Tester blocked | Provide sample data or generation |
-| Generic bug titles | Hard to track | Specific: "[Feature] issue when [action]" |
-| Skip edge cases | Miss critical bugs | Include boundary values, nulls |
+P0 covers critical, security, or data-integrity paths and runs always; P1 covers common flows; P2 covers lower-risk edges. PASS needs all P0, no critical issue, and documented P1 gaps. Every case has preconditions, data, actions, observable results, and requirement traceability.
 
 ## Quiz format
 
@@ -131,10 +114,9 @@ Place deliverables under a `test/` directory inside the path the user named — 
       {flow-1}.feature          # one file per discovered flow
       {flow-2}.feature
       ...
-    test-data.js                # single source of truth / dashboard database (incl. status)
-    dashboard.html              # copied from templates/DASHBOARD.html (opens by double-click)
+    test-data.js                # only when the dashboard is requested — its database (incl. status)
+    dashboard.html              # only when requested — copied from templates/DASHBOARD.html
     regression-suite.json       # when a regression suite is requested
-    test-cases.json             # optional plain-JSON export for test-management tools
 ```
 
 Match the repo's existing QA/test documentation convention if one exists.

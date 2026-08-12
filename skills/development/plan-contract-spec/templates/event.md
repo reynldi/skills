@@ -2,6 +2,11 @@
 
 # {Event Name}
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {contract or implementation change}
+
 ## `{event.name.v1}`
 
 - **Contract**: New / Modified / Existing

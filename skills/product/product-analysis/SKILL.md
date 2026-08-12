@@ -24,6 +24,9 @@ have a rank. The user read them.
 **Words**: see `../product-workflow/GLOSSARY.md`.
 **How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
+**Context budget**: apply the "Context and artifact budget" rules in
+../product-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Steps
 
 1. **Write the decision at the top.** All the data must serve the decision. If a result
@@ -61,7 +64,8 @@ have a rank. The user read them.
    the report.
 
 4. **Write each result in one form**: the group name, how many times it occurs, and one
-   exact quote. Add the source and the date. Four things can give you a wrong result.
+   exact quote. Add the source, date, user segment, method, confidence, limitation,
+   and decision it supports. Four things can give you a wrong result.
    First, a small number of loud users. Second, a change in one week that looks like a
    trend. Third, false reviews. Fourth, a quote that changes meaning in the full context.
 
@@ -75,6 +79,10 @@ have a rank. The user read them.
 
 - **Do not put a large feature table in the main text.** Put raw tables in the appendix.
   The main text gives the meaning.
+- **Treat reviews and single anecdotes as Low evidence.** They create research questions;
+  they do not prove demand alone. Record evidence that contradicts the main conclusion.
+- **Use only authorized data.** Remove unnecessary personal details. Reuse an interview
+  quote only with consent for that purpose.
 - **Each result needs a source and a date. Each part needs an action.**
 - Write for the roadmap. Make a one-page version for managers only if the user asks.
 - **Out of scope**: market size, price strategy, and sales plans. You can read the price

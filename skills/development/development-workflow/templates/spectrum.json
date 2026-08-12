@@ -1,13 +1,42 @@
 {
   "version": 1,
-  "defaults": { "provider": "claude", "model": "", "effort": "medium", "run": "inline" },
+  "defaults": {
+    "provider": "claude",
+    "model": "",
+    "effort": "medium",
+    "run": "inline"
+  },
   "roles": {
-    "coordinator": { "run": "inline" },
-    "researcher": { "effort": "medium" },
-    "planner": { "effort": "high" },
-    "implementer": { "effort": "medium" },
-    "reviewer": { "provider": "codex", "model": "", "effort": "high", "fresh": true },
-    "qa": { "effort": "medium", "fresh": true }
+    "coordinator": {
+      "run": "inline"
+    },
+    "researcher": {
+      "effort": "medium"
+    },
+    "planner": {
+      "effort": "high"
+    },
+    "implementer": {
+      "effort": "medium"
+    },
+    "reviewer": {
+      "provider": "codex",
+      "model": "",
+      "effort": "high",
+      "fresh": true
+    },
+    "qa": {
+      "effort": "medium",
+      "fresh": true
+    }
+  },
+  "personas": {
+    "compass": "L2",
+    "forge": "L2",
+    "prism": "L2",
+    "gauntlet": "L3",
+    "bastion": "L3",
+    "atlas": "L2"
   },
   "stages": {
     "product-discovery": "researcher",
@@ -25,8 +54,23 @@
     "impl-review": "reviewer",
     "qa-test": "qa"
   },
-  "reuse": { "policy": "reuse", "rotateAtContextPct": 75, "alwaysFresh": ["reviewer", "qa"] },
-  "memory": { "featureMemory": "memory.md", "handoffDir": "handoff", "globalMemory": "" },
-  "artifacts": { "specsRoot": "specs" },
-  "delegation": { "yolo": false }
+  "reuse": {
+    "policy": "reuse",
+    "rotateAtContextPct": 75,
+    "alwaysFresh": [
+      "reviewer",
+      "qa"
+    ]
+  },
+  "memory": {
+    "featureMemory": "memory.md",
+    "handoffDir": "handoff",
+    "globalMemory": ""
+  },
+  "artifacts": {
+    "specsRoot": "specs"
+  },
+  "delegation": {
+    "yolo": false
+  }
 }

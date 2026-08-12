@@ -1,5 +1,10 @@
 # {Feature Name} - Technical Spec
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {architecture, contract, or implementation change}
+
 Product Spec: {link/path}
 
 ## Architecture Overview

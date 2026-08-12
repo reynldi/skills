@@ -1,5 +1,10 @@
 # {Feature Name} - Product Spec
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {UX, scope, or evidence change}
+
 ## Overview
 
 {2-4 sentences: the feature, the user problem, and the main flows.}

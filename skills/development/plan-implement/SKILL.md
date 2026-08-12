@@ -12,6 +12,9 @@ description: Execute an approved tasks.md task-by-task with tests, per-task revi
 
 `tasks.md` is the execution order; the specs remain the source of truth for behavior. Do not redesign the feature during implementation.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Preflight
 
 - Record the baseline ref (current commit) as a `Baseline: {sha}` line in the `tasks.md` Readiness block — resume and the Review stage read the `baseline..HEAD` diff range from there. No git → snapshot the changed-file list instead, skip the commit/clean gates, and note it in the report.

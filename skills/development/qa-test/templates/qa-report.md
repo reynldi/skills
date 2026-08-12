@@ -1,5 +1,10 @@
 # {Feature Name} - QA Report
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {implementation change / failed scenario / release decision}
+
 **Status**: PASS <!-- PASS | FAIL -->
 Scenarios: {pass}/{total} passed · Manual checklist items: {n}
 
@@ -8,6 +13,12 @@ Scenarios: {pass}/{total} passed · Manual checklist items: {n}
 | Suite  | Command | Result    |
 | ------ | ------- | --------- |
 | {name} | `{cmd}` | PASS/FAIL |
+
+## Browser Execution
+
+| Scenario | Executor | Expected | Actual | Evidence | Result |
+| --- | --- | --- | --- | --- | --- |
+| {scenario} | {Playwright / project runner} | {expected} | {actual} | {trace / screenshot} | PASS/FAIL |
 
 ## Scenarios
 

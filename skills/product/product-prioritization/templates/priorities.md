@@ -1,5 +1,10 @@
 # {Initiative} - What we build next
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {new evidence / priority change / date}
+
 **This table puts these in order**: user problems / things to build (select one, never both)
 **Goal it serves**: {the change in user behavior}
 

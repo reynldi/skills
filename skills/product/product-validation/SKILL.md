@@ -26,6 +26,9 @@ The purpose: spend a few days to find something that can cost you a few months.
 **Words**: see `../product-workflow/GLOSSARY.md`.
 **How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
+**Context budget**: apply the "Context and artifact budget" rules in
+../product-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Steps
 
 1. **Write what you accept as true with no proof.** Do this for each possible solution.

@@ -48,47 +48,9 @@ execution. Size decides:
   Escalate on evidence: the same cause fails twice → fresh eyes or promote the
   implementer's model tier; ~3 non-converging rounds → committee.
 
-## Scripts
+## Runtime
 
-Deterministic helpers in `bin/` — prefer them over ad-hoc probing:
-
-- `bin/backend.sh` — resolves the backend (paseo / native / none), lists installed
-  provider CLIs, and prints the role → provider map from orchestration preferences.
-  Run this first.
-- `bin/handoff.sh` — ephemeral blocking delegation: runs one agent headless via the
-  shared `agent.sh` runner, streams its report to stdout, and emits the delegation
-  summary (agent, role, provider/model, effort, session ID, status, duration) to
-  stderr and `<brief>.summary.json`.
-- `bin/loop.sh` — bounded worker/verifier loop for the native backend. Refuses to
-  start without verification and without bounds; logs every iteration to disk.
-  On paseo, use `paseo loop run` instead.
-
-## Pick the backend
-
-Check in order; use the first that exists:
-
-1. **Paseo** — the `paseo` skill is available, or `paseo daemon status` succeeds, or the
-   Paseo MCP tools (`create_agent`, `create_workspace`, …) are loaded. Read the `paseo`
-   skill and use its tools/CLI. Loops use `paseo loop run`.
-2. **Native subagents** — the Agent tool (Claude Code) or an equivalent spawn mechanism.
-   Advisor/committee members map to read-only agents; handoff maps to a background agent
-   (worktree isolation when asked); loops map to a worker/verifier cycle you drive.
-3. **None** — no way to spawn agents. Say so and offer to run the pattern inline
-   (for example, play the advisor role yourself in a fresh framing). Never fake a
-   second agent's output.
-
-## Provider selection
-
-Before choosing who runs what, read `~/.paseo/orchestration-preferences.json` if it
-exists — an actual file read, every time. It maps role categories (`impl`, `ui`,
-`research`, `planning`, `audit`) to providers, plus freeform preferences to weave into
-prompts. The user naming a provider always wins. If the file is missing, use what the
-backend offers and tell the user once.
-
-**Contrast is deliberate.** For committees and worker/verifier pairs, pick different
-providers or model families on purpose — each catches the other's blind spots. If an
-advisor would land on your own provider, swap to a different family; a fresh
-perspective is the point.
+Run `bin/backend.sh` first; use Paseo when available, then native subagents, otherwise stay inline without inventing a second opinion. Use `bin/handoff.sh` for bounded transfers and `bin/loop.sh` only with verification and limits. Read orchestration preferences when present; user choice wins. Use a different model family for independent review.
 
 ## Shared principles
 

@@ -1,5 +1,5 @@
 // Live database for dashboard.html — the single source of truth for test cases and status.
-// Same schema as TEST-CASE.json, wrapped in one assignment so the dashboard opens by double-click.
+// Dashboard data, wrapped in one assignment so it opens by double-click.
 // Edit a case's `status` here (not_run | pass | fail | blocked | skipped) and refresh the dashboard.
 window.TEST_DATA = {
   "feature": "Authentication",

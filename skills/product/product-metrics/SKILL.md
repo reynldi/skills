@@ -26,6 +26,9 @@ approves the numbers. No number can give a reward for much output.
 **Words**: see `../product-workflow/GLOSSARY.md`.
 **How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
+**Context budget**: apply the "Context and artifact budget" rules in
+../product-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Steps
 
 1. **Set one main number for the product.** Do this one time for the product, not for

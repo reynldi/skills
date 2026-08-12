@@ -52,7 +52,7 @@ summary() {  # $1=status $2=session_id $3=duration
     echo "── delegation summary ─────────────────────────"
     printf '%-12s %s\n' "agent:" "$name" "role:" "$role" "provider:" "$provider" \
       "model:" "$model" "effort:" "$effort" "session:" "$2" \
-      "status:" "$1" "duration:" "${3}s" "brief:" "$brief_abs" "log:" "${brief_abs%.md}.log"
+      "status:" "$1" "duration:" "${3}s" "brief:" "$brief_abs" "log:" "${run_brief%.md}.log"
     echo "───────────────────────────────────────────────"
   } >&2
   cat > "${brief_abs%.md}.summary.json" <<JSON
@@ -67,7 +67,7 @@ summary() {  # $1=status $2=session_id $3=duration
   "started": "$started",
   "duration_seconds": $3,
   "brief": "$brief_abs",
-  "log": "${brief_abs%.md}.log",
+  "log": "${run_brief%.md}.log",
   "workdir": "$dir"
 }
 JSON
@@ -85,9 +85,32 @@ session_id() {  # best-effort per provider, post-run
   esac
 }
 
+# persona-aware: when --role names a persona, embed its file so any provider
+# (codex, gemini, ...) receives the identity — no native subagent needed
+run_brief="$brief_abs"
+case "$role" in compass|forge|prism|gauntlet|bastion|atlas)
+  for pdir in "$here/../../personas/roles" "$here/../../../workflow/personas/roles"; do
+    if [ -f "$pdir/$role.md" ]; then
+      run_brief="${brief_abs%.md}.as-$role.md"
+      {
+        echo "Adopt this persona completely — its job, principles, vetoes, and thinking levels:"
+        echo ""
+        cat "$pdir/$role.md"
+        case "$effort" in L1|L2|L3|L4) echo ""; echo "Operate at thinking level $effort." ;; esac
+        echo ""
+        echo "---"
+        echo ""
+        cat "$brief_abs"
+      } > "$run_brief"
+      echo "→ persona embedded: $role ($pdir/$role.md)" >&2
+      break
+    fi
+  done
+esac
+
 echo "→ handing off to $provider_spec as \"$name\" (blocking; report follows)" >&2
 status="completed"
-"$AGENT_SH" "$provider_spec" "$brief_abs" "$dir" || status="failed(exit=$?)"
+"$AGENT_SH" "$provider_spec" "$run_brief" "$dir" || status="failed(exit=$?)"
 sid="$(session_id)"; [ -n "$sid" ] || sid="n/a"
 summary "$status" "$sid" "$((SECONDS - t0))"
 [ "$status" = "completed" ]

@@ -32,6 +32,8 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 MARK_START='<!-- rnd-skills:start -->'
 MARK_END='<!-- rnd-skills:end -->'
 
+bash "$ROOT/scripts/validate-skills.sh"
+
 usage() {
   sed -n '2,29p' "$0" | sed 's/^# \{0,1\}//'
   exit 1
@@ -132,6 +134,9 @@ block="$MARK_START
 Reusable skills live in \`$skills_dst\` — one folder per skill, entry point \`SKILL.md\`.
 When a task matches a skill, read its \`SKILL.md\` and follow it exactly.
 
+Default output style: follow \`$skills_dst/simplified-english/SKILL.md\` for every
+user-facing response and document unless the user explicitly requests another style.
+
 Flagship: the feature delivery pipeline. Read \`$skills_dst/development-workflow/SKILL.md\` first —
 it coordinates plan-product-spec -> plan-technical-spec -> plan-contract-spec ->
 plan-verification -> plan-ready -> plan-implement -> impl-review -> qa-test,
@@ -139,6 +144,10 @@ with approval gates, per-feature memory, and multi-model delegation.
 
 Delegation to other agents (advisor / committee / handoff / loop) goes through the
 global orchestrator: \`$skills_dst/orchestrator/SKILL.md\` (helpers in its \`bin/\`).
+
+Role personas (compass, forge, prism, gauntlet, bastion, atlas) live in
+\`$skills_dst/personas/\` — when asked to act as one (e.g. "@bastion"), read its
+file under \`roles/\` and adopt it.
 $MARK_END"
 
 upsert() { # $1 = file
@@ -157,6 +166,27 @@ case ",$agents," in *,claude,*)
   mkdir -p "$cmd_dst"
   cp "$ROOT"/commands/*.md "$cmd_dst/"
   echo "claude:   commands -> $cmd_dst"
+  if [ "$scope" = global ]; then upsert "$HOME/.claude/CLAUDE.md"; else upsert "$dir/CLAUDE.md"; fi
+  # persona subagents: one .claude/agents/<name>.md per persona, so "@bastion"
+  # / "use the bastion agent" resolves natively in Claude Code
+  if [ -d "$skills_dst/personas/roles" ]; then
+    if [ "$scope" = global ]; then agents_dst="$HOME/.claude/agents"; else agents_dst="$dir/.claude/agents"; fi
+    mkdir -p "$agents_dst"
+    pcount=0
+    for pf in "$skills_dst/personas/roles"/*.md; do
+      [ -f "$pf" ] || continue
+      pname="$(basename "$pf" .md)"
+      ptitle="$(head -1 "$pf" | sed 's/^# *//')"
+      {
+        printf -- '---\nname: %s\ndescription: %s persona. Use PROACTIVELY when a task belongs to this role, or when the user says @%s or "as %s".\n---\n\n' "$pname" "$ptitle" "$pname" "$pname"
+        printf 'You are %s. Adopt this persona completely — its job, principles, vetoes, and thinking levels:\n\n' "$ptitle"
+        cat "$pf"
+        printf '\nOperate at the thinking level named in your task (L1–L4). If none is named, read the "personas" block of .spectrum.json in the project root; default L2. Vetoes hold at every level.\n'
+      } > "$agents_dst/$pname.md"
+      pcount=$((pcount + 1))
+    done
+    echo "claude:   $pcount persona subagents -> $agents_dst"
+  fi
 esac
 case ",$agents," in *,codex,*)
   if [ "$scope" = global ]; then upsert "$HOME/.codex/AGENTS.md"; else upsert "$dir/AGENTS.md"; fi
@@ -259,6 +289,16 @@ if [ "$interactive" = 1 ] && [ "$spectrum_mode" != no ]; then
     ask yolo_ans "  Unguarded delegates (yolo — isolated worktrees only)? [y/N] " n
     case "$(lower "$yolo_ans")" in y|yes) yolo=true ;; *) yolo=false ;; esac
 
+    # persona thinking levels (L1 pragmatic .. L4 perfection at scale)
+    l_compass=L2 l_forge=L2 l_prism=L2 l_gauntlet=L3 l_bastion=L3 l_atlas=L2
+    echo "  Persona thinking levels — defaults: compass L2, forge L2, prism L2, gauntlet L3, bastion L3, atlas L2"
+    ask plv "  Overrides like 'forge=L3 bastion=L4' (Enter = defaults): " ""
+    for pair in $plv; do
+      pname="${pair%%=*}"; plevel="${pair#*=}"
+      case "$plevel" in L1|L2|L3|L4|l1|l2|l3|l4) plevel="$(printf '%s' "$plevel" | tr 'l' 'L')" ;; *) echo "  invalid level in '$pair' — skipped"; continue ;; esac
+      case "$pname" in compass|forge|prism|gauntlet|bastion|atlas) eval "l_$pname=\$plevel" ;; *) echo "  unknown persona in '$pair' — skipped" ;; esac
+    done
+
     cat > "$spectrum_file" <<JSON
 {
   "version": 1,
@@ -270,6 +310,10 @@ if [ "$interactive" = 1 ] && [ "$spectrum_mode" != no ]; then
     "implementer": { "provider": "$p_implementer", "model": "$m_implementer", "effort": "$e_implementer" },
     "reviewer": { "provider": "$p_reviewer", "model": "$m_reviewer", "effort": "$e_reviewer", "fresh": true },
     "qa": { "provider": "$p_qa", "model": "$m_qa", "effort": "$e_qa", "fresh": true }
+  },
+  "personas": {
+    "compass": "$l_compass", "forge": "$l_forge", "prism": "$l_prism",
+    "gauntlet": "$l_gauntlet", "bastion": "$l_bastion", "atlas": "$l_atlas"
   },
   "stages": {
     "product-discovery": "researcher",

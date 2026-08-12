@@ -1,5 +1,10 @@
 # {Initiative} - Discovery
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {new interviews / scope change / date}
+
 **Goal**: {the change in user behavior that this work serves}
 **Users we think have the problem**: {which users, and what we believe about them now}
 

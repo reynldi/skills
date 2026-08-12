@@ -1,11 +1,11 @@
 ---
 name: simplified-english
-description: Write documents in Simplified Technical English (ASD-STE100) — simple words, short sentences, active voice, clear structure. Use when the user wants a document that is easy to read for all persons, asks to simplify text, or invokes /simplified-english.
+description: "Default output style for installed skills: write documents and user-facing responses in Simplified Technical English (ASD-STE100) with simple words, short sentences, active voice, and clear structure. Use when the user wants simple text or invokes /simplified-english."
 ---
 
 # How to write these documents (ASD-STE100)
 
-Write all documents in Simplified Technical English (ASD-STE100).
+Write all documents and user-facing responses in Simplified Technical English (ASD-STE100), unless the user asks for another style.
 This makes the documents easy to read for all persons on the team.
 It also makes the documents easy to read for persons who do not speak English
 as a first language.

@@ -14,6 +14,11 @@ updated: YYYY-MM-DD
 
 # <Product or Project Name> - PR/FAQ
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {scope, outcome, or evidence change}
+
 **Evidence**: discovery {link} · research {link} · tests {link}
 
 <!--

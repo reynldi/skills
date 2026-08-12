@@ -10,6 +10,9 @@ description: Final planning gate — verify specs are consistent, then generate 
 **Output**: `tasks.md` beside the specs — structure: `templates/tasks.md`. On FAIL, write only its Readiness block (Status FAIL + issues); generate tasks only after the gate passes. Re-runs update in place — preserve completed checkboxes, task IDs, and appended fix tasks; only add or modify tasks affected by the change.
 **Gate**: FAIL — no tasks generated — while any Blocking/High finding is open. On PASS, present `tasks.md`, get explicit user approval, and record it: set `User approval: approved` in the Readiness block before /plan-implement.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## 1. Quality gate
 
 If `verification.md` exists with Status PASS/PASS_WITH_NOTES and the specs still match its recorded verified-input hashes, run only a delta check (decisions applied? anything changed since?). Otherwise verify:
@@ -25,7 +28,20 @@ On FAIL, report each issue with: severity (per the /plan-verification ladder), a
 
 Stack, project structure, existing related code, stories and priorities (from the Product Spec), models, contracts, technical decisions. Discover available reviewer agents/skills and test commands. If the project defines its own workflow/checkpoint convention, adopt it over the defaults below.
 
-## 3. Generate tasks
+## 3. Choose QA depth
+
+Assess user impact, changed surfaces, failure cost, reversibility, existing coverage,
+and complexity (branches, states, concurrency, migration, integrations, or platforms).
+Record one choice in `tasks.md`:
+
+- **Focused** — acceptance criteria, focused automated test, and affected-flow smoke check.
+- **Feature** — QA charter, happy path, important edge/failure states, and relevant contract checks.
+- **Full** — /qa-planning before /qa-test: test plan, traceable cases, and a risk-based regression suite.
+
+Choose Full only for complex, high-risk, cross-surface, regression-prone work, or
+durable cross-release coverage. Every choice still requires /qa-test acceptance proof.
+
+## 4. Generate tasks
 
 Every task maps to a user story or a real shared prerequisite — nothing speculative.
 

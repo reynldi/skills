@@ -32,6 +32,9 @@ Screens, fields, and flows belong to `/plan-product-spec`. The architecture belo
 **Words**: see `../product-workflow/GLOSSARY.md`.
 **How to write**: see `../product-workflow/STE.md`. Use simple English in the document.
 
+**Context budget**: apply the "Context and artifact budget" rules in
+../product-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## How much to write
 
 | Size of the work | Template | How much to write |

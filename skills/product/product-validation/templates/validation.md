@@ -1,5 +1,10 @@
 # {Initiative} - Assumptions and Tests
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {test result / risk change / date}
+
 **Solutions we test**: {from discovery.md — the selected problem and the possible solutions}
 
 ## What we accept as true with no proof

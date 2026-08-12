@@ -10,6 +10,9 @@ description: Create an implementation-ready Technical Spec from a Product Spec. 
 **Output**: `technical-spec.md` beside the Product Spec — structure: `templates/technical-spec.md` (read only when writing). Update in place on re-runs.
 **Gate**: Final Check passes; unresolved product questions surfaced, never answered unilaterally; user approves before the next stage — then set the Status footer to APPROVED.
 
+**Context budget**: apply the "Risk and token budget" protocol in
+../development-workflow/SKILL.md; load more only when it changes the current decision.
+
 ## Process
 
 1. **Understand the Product Spec** — required flows and behavior; separate confirmed requirements from assumptions/open questions. Do not invent product behavior; carry unresolved product questions into the spec's Open Questions and surface them to the user.

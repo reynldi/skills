@@ -15,6 +15,11 @@ updated: YYYY-MM-DD
 
 # <Feature Name>
 
+**Lifecycle**: ACTIVE
+**Owner**: {owner}
+**Next consumer**: {stage / person}
+**Review trigger**: {scope, outcome, or evidence change}
+
 **Size**: small change | one cycle | new product (for a new product, use `pr-faq.md`)
 **Evidence**: discovery {link} · research {link} · tests {link} · priorities {link} · numbers {link}
 

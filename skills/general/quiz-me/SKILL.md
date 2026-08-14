@@ -97,11 +97,17 @@ Example — instead of "`useEffect` runs AFTER the browser shows the new picture
 ## Run the quiz
 
 1. Ask one question. Wait for the answer.
-2. After each answer, respond with this shape:
+2. After each answer, assess before you recommend — never open with the verdict. Respond with this shape:
 
-   > **{Correct / Not correct}.** The answer is {X}.
+   > **Your answer ({user's pick}):** {assessment — what the user's answer says about the idea, which part is right, which part is off}
    >
-   > **Why:** {explanation at the level's answer style}
+   > **{Correct / Not correct}.** Recommended answer: {X}.
+   >
+   > **Why {X}:** {the reason, at the level's answer style — why {X} fits the idea and why the closest other option does not}
+
+   The recommended answer must come from your assessment of the options against the idea, never from
+   pattern or habit. If the user's answer reveals you are not sure what the right answer is anymore,
+   say so and re-check before you grade — do not defend a wrong key.
 3. Track the score. Do not repeat a question the user got right.
 4. After the last question, give a result:
 

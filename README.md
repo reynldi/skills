@@ -38,11 +38,13 @@ Every skill runs standalone via its slash command. The two workflow skills coord
 | `/plan-ready` | "generate implementation tasks" | Stage 5 — final gate; emits `tasks.md` and records the QA-depth choice. |
 | `/plan-implement` | "implement the tasks" | Stage 6 — task-by-task build with checkpoints and regression runs. |
 | `/impl-review` | "review the implementation" | Stage 7 — independent review against specs; PASS gate. |
+| `/code-review` | "review this diff/branch against main" | Standalone three-axis review (Spec / Standards / Risk) via parallel subagents; not part of the pipeline. |
 | `/qa-test` | "QA this feature" | Stage 8 — acceptance proof against the Product Spec; writes `qa-report.md`. |
 | `/qa-planning` | "create a test plan / regression suite" | Full-QA planning: test plan, Gherkin cases, regression suite, optional dashboard. |
 | `/spec-analyze` | "is this spec sound?" | Judge an existing product or technical spec against competitors, first principles, and the codebase. |
 | `/spec-generate` | "spec this existing feature" | Trace a shipped feature through the code and write its spec retroactively. |
 | `/task-management` | "break this plan into tickets" | Atomic, dependency-ordered tickets (tracer-bullet slices), or review tasks against specs. |
+| `/retro` | "run a retro on this feature" | Post-ship retrospective — review lessons one by one and, with permission, write each into the right spec, skill, constitution, or memory file. |
 
 ### General (`skills/general/`)
 
@@ -50,6 +52,7 @@ Every skill runs standalone via its slash command. The two workflow skills coord
 | ----- | ---------- | ---------- |
 | `/simplified-english` | "simplify this text" | Write documents in Simplified Technical English (ASD-STE100). Default output style for the product skills. |
 | `/eli5` | "ELI5 this" | Explain any topic, decision, code, or process for a complete beginner. |
+| `/quiz-me` | "quiz me on this" | Quiz the user on a topic — or this session's unresolved topics — at eli5, medium, or comprehensive level, with an explanation for every answer. |
 
 An APPROVED `prd.md` connects product to delivery: `/product-workflow` ends where `/plan-product-spec` begins, in the same feature folder.
 

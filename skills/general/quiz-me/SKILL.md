@@ -31,9 +31,19 @@ Before you start, state the source in one line: "Quiz source: {topic or session 
 
 ## Pick the level
 
-Three levels. If the user names one, use it. If not, recommend one and give the reason
-(for example: "I recommend **medium** because you already used these terms correctly in this session").
-Never base the recommendation on a guess about the user — if the session gives no signal, ask which level they want.
+Three levels. Always show your recommendation inline in the visible response, with its reason — in every mode:
+
+- User named a level → use it, but still state your recommendation on the line after the source line:
+  `Recommended: {level} — {reason}. Using {user's level} (your pick).`
+  If the pick matches the recommendation, say that too: `Recommended: {level} — {reason}. Matches your pick.`
+- User named no level → recommend one with the reason
+  (for example: "I recommend **medium** because you already used these terms correctly in this session"),
+  then ask them to confirm or change it.
+- Interactive question tool in use → the recommendation still goes in the visible text (and mark the
+  recommended option "(Recommended)"); never let it live only inside the tool's options.
+
+Never base the recommendation on a guess about the user — if the session gives no signal, say so
+("no signal for a level recommendation") and ask which level they want.
 
 | Level | Questions | Question style | Answer style |
 | ----- | --------- | -------------- | ------------ |

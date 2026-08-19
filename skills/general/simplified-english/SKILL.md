@@ -13,7 +13,8 @@ as a first language.
 ## Words
 
 1. Use simple, common words. Use one word for one meaning.
-2. Use the same word each time you write about the same thing.
+2. No em-dash and emojis allowed unless user asks for it.
+3. Use the same word each time you write about the same thing.
 3. Do not use product jargon. If you must use a technical name, tell the reader
    what it means the first time.
 4. Do not use slang. Do not use idioms. Do not use words that make a picture,

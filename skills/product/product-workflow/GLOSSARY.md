@@ -42,5 +42,4 @@ skill also gives the meaning.
 | Table stakes | All competitors have it. If you do not have it, you lose. If you have it, you win nothing. |
 | Differentiator | A reason a user selects your product and not another product. |
 | PRD | Product Requirements Document. It gives the problem, the users, and the definition of done. |
-| PR/FAQ | A document format. Write the launch announcement first. Then answer the hard questions. |
 | Acceptance criteria | The list of conditions that show a requirement is complete. |

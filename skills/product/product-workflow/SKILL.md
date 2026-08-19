@@ -31,6 +31,7 @@ in `STE.md`. Keep instruction sentences to 20 words or less. Use the active voic
 | P3 | Test the risks | product-validation | validation.md | you test each large assumption, or the user accepts the risk |
 | P4 | Select what to build | product-prioritization | priorities.md | the user approves the selection |
 | P5 | Write the PRD | product-prd | prd.md | the checks pass and the user approves |
+| P5b | Verify the PRD (only if needed) | product-prd-verification | prd-verification.md | no Blocking or High finding stays open |
 | P6 | Set the numbers | product-metrics | metrics.md | the numbers are exact and the user approves them before PRD approval |
 | →  | Build it | `/development-workflow` (stages 1–8) | its own documents | its own gates. prd.md is the input |
 | P7 | Measure the result | product-metrics (update) | metrics.md | you record the real numbers and the user approves the lessons, then go back to P1 |

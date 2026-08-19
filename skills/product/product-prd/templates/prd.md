@@ -15,21 +15,26 @@ updated: YYYY-MM-DD
 
 # <Feature Name>
 
-**Lifecycle**: ACTIVE
 **Owner**: {owner}
-**Next consumer**: {stage / person}
-**Review trigger**: {scope, outcome, or evidence change}
 
-**Size**: small change | one cycle | new product (for a new product, use `pr-faq.md`)
-**Evidence**: discovery {link} · research {link} · tests {link} · priorities {link} · numbers {link}
+**Technical Lead**: {name}
+
+**QA**: {name}
+
+**Contributors**: {names, separated by commas — or "None"}
 
 <!--
 How to use this template:
 - Write in simple English. Keep instruction sentences to 20 words or less.
 - Delete each part that this feature does not need. An empty part helps nobody.
 - Do not write "not specified". Delete the row or the part.
-- Do not invent content. If the source does not say it, write "the source does not say".
-- For a small change, Part 1 to Part 5 are enough. Add Part 6 to Part 8 for larger work.
+- Do not invent content. If the source does not say it, write "Not in the source".
+- When a part has no content, write a short label. Do not explain the absence. Write
+  "No problem defined", "No success metrics", "Not in the source".
+- For a small change, Part 1 to Part 4 are enough. Add Part 5 to Part 6 for larger work.
+- The PIC lines (Owner, Technical Lead, QA, Contributors) name real persons.
+  /product-publish-prd uses these names to build mentions for the open questions,
+  the assumptions, and the risky details.
 -->
 
 ## 1. Introduction
@@ -57,18 +62,14 @@ what it costs them. Add links to the evidence. Do not write about a solution her
 
 **Why now**: {…}
 
-## 3. Success numbers
+## 3. Success Metrics
 
-- **Main number**: {number} — start {…} → target {…} in {time limit}
-- **Must not become worse**: {number} will not become worse than {amount}
+- **Main metric**: {metric} — start {…} → target {…} in {time limit}
+- **Must not become worse**: {metric} will not become worse than {amount}
 
 <!-- Copy these values from metrics.md. The two files must be the same. -->
 
-## 4. Time budget
-
-{The time the team accepts to spend. This is a limit for the design. It is not an estimate.}
-
-## 5. Not in scope
+## 4. Not in scope
 
 <!-- Write 3 or more. Each line is something the team can build but decides not to build. -->
 
@@ -76,13 +77,13 @@ what it costs them. Add links to the evidence. Do not write about a solution her
 - {…}
 - {…}
 
-**If the time runs out**:
+**If the scope must shrink**:
 
 | Must ship | Remove first |
 | --- | --- |
 | {…} | {…} |
 
-## 6. User stories
+## 5. User stories
 
 <!-- Put the stories in groups. P1 = must have. P2 = good to have. -->
 
@@ -91,58 +92,37 @@ what it costs them. Add links to the evidence. Do not write about a solution her
 1. (P1) As a {user type}, I want {function}, so that {result}.
 2. (P2) …
 
-## 7. Requirements
+## 6. Requirements
 
 <!--
 One row for each requirement.
-- Requirement: if a source PRD exists, copy the words exactly. Do not change them. If you
-  write the requirement yourself, keep it short and exact.
-- Acceptance criteria: the conditions that show the requirement is complete. Use bullets
-  for more than one condition. Use only what the source says. If the source says nothing,
-  write "the source does not say".
-- Design: a link, if a design exists. If not, write "—".
+- User story: the story from Part 5 that this row serves. Use the same words.
+- Acceptance criteria: the conditions that show the requirement is complete. Always number
+  them: 1, 2, 3. Use sub-numbers (1.1, 1.2) inside one condition group. Put one empty line
+  between each number: use `<br><br>` in the table cell. Use only what the source says. If
+  the source says nothing, write "Not in the source".
+- Requirements: what the product must do for this story. Keep it specific: the normal
+  behavior, the error and rare cases, and the quality the user can feel. Number them and
+  separate each number with `<br><br>`. No screens, no field lists, no architecture.
+- Attachments: links to the design, the mockup, the ticket, or the file. One per line. If
+  there is none, write "None".
 -->
 
-| No | Requirement | Acceptance criteria | Design |
-|----|-------------|---------------------|--------|
-| 1 | | | |
+| No | User story | Acceptance criteria | Requirements | Attachments |
+|----|------------|---------------------|--------------|-------------|
+| 1 | As a {user type}, I want {function}, so that {result}. | 1. {condition}<br><br>2. {condition}<br><br>2.1 {sub-condition}<br><br>2.2 {sub-condition} | 1. {what the product does in the normal case}<br><br>2. {what the product does in an error case or a rare case}<br><br>3. {quality the user can feel, for example the page opens in 2 seconds} | None |
 
-## 8. Detail: {function name}
-
-<!-- Copy this part one time for each function that needs detail. Skip it for a small change. -->
-
-### User story
-
-{The user story from Part 6 that this function serves}
-
-### Problem
-
-{The problem of the user}
-
-### Solution
-
-{What the user sees and what the product does}
-
-### Behavior
-
-- {What the product does in the normal case}
-- {What the product does in an error case or a rare case}
-
-### Quality the user can feel
-
-- {Only the requirements that the user can see or feel. For example, the page opens in 2 seconds.}
-
-## 9. Risky details
+## 7. Risky details
 
 <!-- Small details that can take many weeks. Make the decision now, or write that you accept the risk. -->
 
 - {risky detail → the decision, or the reason to accept the risk}
 
-## 10. Assumptions
+## 8. Assumptions
 
 - {something you accept as true, with no proof, and it is safe to accept}
 
-## 11. Open questions
+## 9. Open questions
 
 - {a decision that changes the behavior of the product and needs the user}
 

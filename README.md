@@ -23,8 +23,10 @@ Every skill runs standalone via its slash command. The two workflow skills coord
 | `/product-analysis` | "research competitors", "market research" | Answer one exact question from competitor products, reviews, and win/loss evidence. Optional stage. |
 | `/product-validation` | "test this idea", "design an experiment" | Find the assumption that can kill the idea and run the cheapest test that can prove it false. |
 | `/product-prioritization` | "order the backlog", "make a roadmap" | Score problems and solutions with sources for each number; roadmap with no false dates. |
-| `/product-prd` | "write a PRD for X" | Short PRD that starts with the problem — 5W1H, success numbers, stories, acceptance criteria. |
+| `/product-prd` | "write a PRD for X" | Short PRD that starts with the problem — 5W1H, success metrics, stories, acceptance criteria. |
+| `/product-prd-verification` | "verify this PRD", "the publish gate failed" | Skeptical review of one PRD — gaps, parts that do not belong, unclear words, risks; then close each gap by asking the user question by question. |
 | `/product-metrics` | "set success metrics for X" | Define success in falsifiable numbers before building; record real numbers after launch. |
+| `/product-publish-prd` | "publish this PRD to Confluence" | Quality-gate the session's PRD against the template, ask for space/parent with remembered defaults, add PIC mentions, publish. |
 
 ### Development (`skills/development/`)
 
